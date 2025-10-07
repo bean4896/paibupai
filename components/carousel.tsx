@@ -30,14 +30,16 @@ import Avatar17 from '@/public/images/carousel-avatar-17.jpg'
 import Avatar18 from '@/public/images/carousel-avatar-18.jpg'
 
 // Import Swiper
-import Swiper, { Navigation } from 'swiper'
+import Swiper from 'swiper'
+import { Navigation } from 'swiper/modules'
 import 'swiper/css'
-Swiper.use([Navigation])
+import 'swiper/css/navigation'
 
 export default function Carousel() {
 
   useEffect(() => {
-    const carousel = new Swiper('.carousel', {
+    new Swiper('.carousel', {
+      modules: [Navigation],
       breakpoints: {
         320: {
           slidesPerView: 1,

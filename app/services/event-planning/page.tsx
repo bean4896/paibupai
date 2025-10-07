@@ -361,7 +361,7 @@ export default function EventPlanning() {
               Singapore Venue Expertise
             </Heading>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              We have extensive knowledge of Singapore's best event venues and locations
+              We have extensive knowledge of Singapore&apos;s best event venues and locations
             </p>
           </div>
           
@@ -404,7 +404,7 @@ export default function EventPlanning() {
                 Local Partnerships
               </Heading>
               <p className="text-gray-600">
-                Strong relationships with Singapore's top venues, vendors, and service providers.
+                Strong relationships with Singapore&apos;s top venues, vendors, and service providers.
               </p>
             </div>
           </div>

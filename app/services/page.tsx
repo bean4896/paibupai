@@ -223,7 +223,7 @@ export default function Services() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900 mb-2">Local Singapore Expertise</h3>
-                    <p className="text-gray-600">Deep understanding of Singapore's culture, venues, and business landscape.</p>
+                    <p className="text-gray-600">Deep understanding of Singapore&apos;s culture, venues, and business landscape.</p>
                   </div>
                 </div>
                 

@@ -119,7 +119,7 @@ export default function SocialMediaMarketing() {
             </Heading>
             
             <p className="text-xl text-gray-600 mb-8" data-aos="fade-up" data-aos-delay="100">
-              Boost your brand's online presence with professional social media marketing and content creation services in Singapore.
+              Boost your brand&apos;s online presence with professional social media marketing and content creation services in Singapore.
             </p>
             
             <Button href="/contact" variant="primary" className="mb-8" data-aos="fade-up" data-aos-delay="200">
@@ -253,7 +253,7 @@ export default function SocialMediaMarketing() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900 mb-2">Content Creation</h3>
-                    <p className="text-gray-600">Create high-quality, engaging content optimized for each platform's requirements.</p>
+                    <p className="text-gray-600">Create high-quality, engaging content optimized for each platform&apos;s requirements.</p>
                   </div>
                 </div>
                 
@@ -345,7 +345,7 @@ export default function SocialMediaMarketing() {
             Ready to Boost Your Social Media Presence?
           </Heading>
           <p className="text-xl text-primary-100 mb-8">
-            Let's create a social media strategy that drives engagement and grows your brand.
+            Let&apos;s create a social media strategy that drives engagement and grows your brand.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button href="/contact" variant="secondary">

@@ -24,7 +24,7 @@ export default function Contact() {
               className="mb-6"
               data-aos="fade-up"
             >
-              Let's Create Something{' '}
+              Let&apos;s Create Something{' '}
               <span className="text-primary-500">Amazing Together</span>
             </Heading>
             

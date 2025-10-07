@@ -7,10 +7,10 @@ import TestimonialsImage03 from '@/public/images/testimonial-03.jpg'
 import { Section, TestimonialCard } from './ui'
 
 // Import Swiper
-import Swiper, { Pagination } from 'swiper'
+import Swiper from 'swiper'
+import { Pagination } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/pagination'
-Swiper.use([Pagination])
 
 const testimonials = [
   {
@@ -41,7 +41,8 @@ const testimonials = [
 
 export default function Testimonials() {
   useEffect(() => {
-    const testimonial = new Swiper('.testimonial-carousel', {
+    new Swiper('.testimonial-carousel', {
+      modules: [Pagination],
       slidesPerView: 1,
       watchSlidesProgress: true,
       pagination: {

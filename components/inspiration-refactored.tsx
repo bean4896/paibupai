@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import Link from 'next/link'
 import Author01 from '@/public/images/author-01.jpg'
 import Inspiration01 from '@/public/images/inspiration-01.jpg'
 import Inspiration02 from '@/public/images/inspiration-02.jpg'

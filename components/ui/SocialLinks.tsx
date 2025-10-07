@@ -1,10 +1,11 @@
 import Link from 'next/link'
+import { ReactElement } from 'react'
 import { socialMediaConfig } from '@/lib/social-config'
 
 interface SocialLink {
   name: string
   href: string
-  icon: JSX.Element
+  icon: ReactElement
   ariaLabel: string
 }
 

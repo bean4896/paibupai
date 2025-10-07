@@ -47,7 +47,7 @@ export default function Blog() {
               </svg>
               <h3 className="text-2xl font-bold text-gray-900 mb-2">Blog Coming Soon</h3>
               <p className="text-gray-600 mb-6">
-                We're working on creating amazing photography content for you. Stay tuned for professional tips, Singapore event coverage, and creative insights!
+                We&apos;re working on creating amazing photography content for you. Stay tuned for professional tips, Singapore event coverage, and creative insights!
               </p>
               <div className="bg-primary-50 border border-primary-200 rounded-lg p-6">
                 <h4 className="text-lg font-semibold text-primary-900 mb-2">What to Expect</h4>

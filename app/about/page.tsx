@@ -4,7 +4,6 @@ export const metadata = {
 }
 
 import { Section, Heading, Button } from '@/components/ui'
-import Image from 'next/image'
 
 export default function About() {
   return (
@@ -25,12 +24,12 @@ export default function About() {
               className="mb-6"
               data-aos="fade-up"
             >
-              Capturing Singapore's{' '}
+              Capturing Singapore&apos;s{' '}
               <span className="text-primary-500">Creative Spirit</span>
             </Heading>
             
             <p className="text-xl text-gray-600 mb-8" data-aos="fade-up" data-aos-delay="100">
-              We are Paibupai, Singapore's premier photography agency dedicated to bringing your vision to life through stunning visual storytelling.
+              We are Paibupai, Singapore&apos;s premier photography agency dedicated to bringing your vision to life through stunning visual storytelling.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center" data-aos="fade-up" data-aos-delay="200">
@@ -56,7 +55,7 @@ export default function About() {
               <div className="space-y-4 text-gray-600">
                 <p>
                   Founded in Singapore, Paibupai has been at the forefront of creative photography for over a decade. 
-                  We specialize in capturing the unique essence of Singapore's vibrant culture and modern lifestyle.
+                  We specialize in capturing the unique essence of Singapore&apos;s vibrant culture and modern lifestyle.
                 </p>
                 <p>
                   Our team of talented photographers and creative professionals work together to deliver exceptional 
@@ -64,7 +63,7 @@ export default function About() {
                 </p>
                 <p>
                   From corporate events to social media campaigns, we bring creativity, professionalism, and 
-                  Singapore's distinctive flair to every project we undertake.
+                  Singapore&apos;s distinctive flair to every project we undertake.
                 </p>
               </div>
             </div>
@@ -131,7 +130,7 @@ export default function About() {
                 Community
               </Heading>
               <p className="text-gray-600">
-                We believe in building lasting relationships with our clients and contributing to Singapore's creative community.
+                We believe in building lasting relationships with our clients and contributing to Singapore&apos;s creative community.
               </p>
             </div>
           </div>
@@ -206,7 +205,7 @@ export default function About() {
             Ready to Work With Us?
           </Heading>
           <p className="text-xl text-primary-100 mb-8">
-            Let's discuss your photography needs and create something amazing together.
+            Let&apos;s discuss your photography needs and create something amazing together.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button href="/contact" variant="secondary">

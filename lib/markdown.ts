@@ -4,9 +4,22 @@ import remarkHtml from 'remark-html'
 import remarkGfm from 'remark-gfm'
 import { BlogPost } from './blog-config'
 
+interface FrontMatterData {
+  title?: string
+  date?: string
+  author?: string
+  excerpt?: string
+  tags?: string[]
+  featured?: boolean
+  coverImage?: string
+  image?: string
+  slug?: string
+  [key: string]: unknown
+}
+
 // Process markdown content
 export async function processMarkdown(content: string): Promise<{
-  data: any
+  data: FrontMatterData
   content: string
   html: string
 }> {
@@ -48,14 +61,15 @@ export function generateExcerpt(content: string, maxLength: number = 160): strin
 }
 
 // Validate blog post data
-export function validateBlogPost(data: any, content: string): BlogPost {
-  const slug = data.slug || generateSlug(data.title)
+export function validateBlogPost(data: FrontMatterData, content: string): BlogPost {
+  const title = data.title || 'Untitled'
+  const slug = data.slug || generateSlug(title)
   const excerpt = data.excerpt || generateExcerpt(content)
   const readTime = calculateReadingTime(content)
   
   return {
     slug,
-    title: data.title || 'Untitled',
+    title,
     excerpt,
     content,
     date: data.date || new Date().toISOString(),
