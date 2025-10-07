@@ -1,0 +1,28 @@
+{
+  "currentEvent": {
+    "isActive": true,
+    "title": "Singapore Photography Workshop 2024",
+    "subtitle": "Master the Art of Event Photography",
+    "description": "Join our exclusive photography workshop featuring industry experts and hands-on training sessions.",
+    "date": "March 15-16, 2024",
+    "location": "Marina Bay Sands, Singapore",
+    "ctaText": "Register Now",
+    "ctaLink": "/contact",
+    "backgroundImage": "/images/event-banner-bg.jpg",
+    "badge": "Limited Spots Available"
+  },
+  "upcomingEvents": [
+    {
+      "title": "Corporate Photography Masterclass",
+      "date": "April 20, 2024",
+      "location": "Orchard Central",
+      "status": "upcoming"
+    },
+    {
+      "title": "Social Media Content Creation Workshop",
+      "date": "May 10, 2024", 
+      "location": "Suntec City",
+      "status": "upcoming"
+    }
+  ]
+}

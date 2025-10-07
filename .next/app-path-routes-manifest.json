@@ -1,0 +1,17 @@
+{
+  "/api/hello/route": "/api/hello",
+  "/api/blog/route": "/api/blog",
+  "/(default)/page": "/",
+  "/(auth)/reset-password/page": "/reset-password",
+  "/(auth)/signup/page": "/signup",
+  "/(default)/about/page": "/about",
+  "/(default)/blog/page": "/blog",
+  "/api/blog/[slug]/route": "/api/blog/[slug]",
+  "/(default)/contact/page": "/contact",
+  "/(auth)/signin/page": "/signin",
+  "/(default)/services/page": "/services",
+  "/(default)/blog/[slug]/page": "/blog/[slug]",
+  "/(default)/services/event-planning/page": "/services/event-planning",
+  "/(default)/services/photoshooting/page": "/services/photoshooting",
+  "/(default)/services/social-media-marketing/page": "/services/social-media-marketing"
+}

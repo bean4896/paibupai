@@ -1,0 +1,17 @@
+{
+  "/api/hello/route": "app/api/hello/route.js",
+  "/api/blog/route": "app/api/blog/route.js",
+  "/(default)/page": "app/(default)/page.js",
+  "/(auth)/reset-password/page": "app/(auth)/reset-password/page.js",
+  "/(auth)/signup/page": "app/(auth)/signup/page.js",
+  "/(default)/about/page": "app/(default)/about/page.js",
+  "/(default)/blog/page": "app/(default)/blog/page.js",
+  "/api/blog/[slug]/route": "app/api/blog/[slug]/route.js",
+  "/(default)/contact/page": "app/(default)/contact/page.js",
+  "/(auth)/signin/page": "app/(auth)/signin/page.js",
+  "/(default)/services/page": "app/(default)/services/page.js",
+  "/(default)/blog/[slug]/page": "app/(default)/blog/[slug]/page.js",
+  "/(default)/services/event-planning/page": "app/(default)/services/event-planning/page.js",
+  "/(default)/services/photoshooting/page": "app/(default)/services/photoshooting/page.js",
+  "/(default)/services/social-media-marketing/page": "app/(default)/services/social-media-marketing/page.js"
+}
