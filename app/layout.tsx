@@ -1,48 +1,23 @@
-import './css/style.css'
+import type { Metadata } from 'next'
+import '@/app/css/style.css'
+import ClientLayout from './client-layout'
 
-import { Inter } from 'next/font/google'
-import localFont from 'next/font/local'
-
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
-  display: 'swap'
-})
-
-const cabinet = localFont({
-  src: [
-    {
-      path: '../public/fonts/CabinetGrotesk-Medium.woff2',
-      weight: '500',
-    },
-    {
-      path: '../public/fonts/CabinetGrotesk-Bold.woff2',
-      weight: '700',
-    },
-    {
-      path: '../public/fonts/CabinetGrotesk-Extrabold.woff2',
-      weight: '800',
-    },
-  ],
-  variable: '--font-cabinet-grotesk',
-  display: 'swap',
-})
-
-export const metadata = {
-  title: 'Paibupai - The Platform for Creative Minds',
-  description: 'Join the best creative community. Discover inspiration, connect with creatives, and showcase your work on Paibupai.',
-  keywords: 'creative, design, inspiration, community, artists, designers, portfolio',
-  authors: [{ name: 'Paibupai' }],
+export const metadata: Metadata = {
+  title: 'Paibupai Photography - Professional Photography Services in Singapore',
+  description: 'Premier photography services in Singapore specializing in event photography, social media content, and professional photoshoots. Capture your moments with Paibupai.',
+  keywords: ['photography Singapore', 'event photography', 'professional photographer', 'photo shoot', 'social media content', 'corporate photography'],
+  authors: [{ name: 'Paibupai Photography' }],
   openGraph: {
-    title: 'Paibupai - The Platform for Creative Minds',
-    description: 'Join the best creative community. Discover inspiration, connect with creatives, and showcase your work.',
+    title: 'Paibupai Photography - Professional Photography Services in Singapore',
+    description: 'Premier photography services in Singapore specializing in event photography, social media content, and professional photoshoots.',
     type: 'website',
-    locale: 'en_US',
+    locale: 'en_SG',
+    siteName: 'Paibupai Photography',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Paibupai - The Platform for Creative Minds',
-    description: 'Join the best creative community. Discover inspiration, connect with creatives, and showcase your work.',
+    title: 'Paibupai Photography - Professional Photography Services in Singapore',
+    description: 'Premier photography services in Singapore specializing in event photography, social media content, and professional photoshoots.',
   },
 }
 
@@ -53,9 +28,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${cabinet.variable} font-inter antialiased bg-white text-gray-800 tracking-tight`}>
-        <div className="flex flex-col min-h-screen overflow-hidden">
-          {children}
+      <body className="font-inter tracking-tight text-gray-900 antialiased">
+        <div className="flex flex-col min-h-screen overflow-hidden supports-[overflow:clip]:overflow-clip">
+          <ClientLayout>{children}</ClientLayout>
         </div>
       </body>
     </html>
