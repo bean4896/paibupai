@@ -12,7 +12,7 @@ import Testimonials from '@/components/testimonials'
 import Faqs from '@/components/faqs'
 import Blog from '@/components/blog'
 import eventsData from '@/data/events.json'
-import Cta from '@/components/cta'
+
 
 export default function Home() {
   return (

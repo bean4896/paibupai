@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import React, { ReactNode } from 'react'
 
 export interface HeadingProps {
   children: ReactNode
@@ -30,7 +30,7 @@ export default function Heading({
   className = '',
   center = false
 }: HeadingProps) {
-  const Tag = `h${level}` as keyof JSX.IntrinsicElements
+  const Tag = `h${level}` as keyof React.JSX.IntrinsicElements
   const variantClasses = headingVariants[variant]
   const sizeClasses = headingSizes[level]
   const centerClasses = center ? 'text-center' : ''

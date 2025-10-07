@@ -8,7 +8,7 @@ import Image from 'next/image'
 
 export default function About() {
   return (
-    <>
+    <>233
       {/* Hero Section */}
       <Section
         padding="none"
