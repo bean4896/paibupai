@@ -1,27 +1,33 @@
 {
   "currentEvent": {
     "isActive": true,
-    "title": "Singapore Photography Workshop 2024",
-    "subtitle": "Master the Art of Event Photography",
-    "description": "Join our exclusive photography workshop featuring industry experts and hands-on training sessions.",
-    "date": "March 15-16, 2024",
-    "location": "Marina Bay Sands, Singapore",
-    "ctaText": "Register Now",
+    "title": "Gardens by the Bay Wedding Photography Showcase 2025",
+    "subtitle": "Capture Your Dream Wedding in Singapore's Most Iconic Location",
+    "description": "Experience our exclusive outdoor wedding photography package featuring stunning backdrops at Gardens by the Bay, including Supertree Grove and Cloud Forest.",
+    "date": "January 20 - March 31, 2025",
+    "location": "Gardens by the Bay, Singapore",
+    "ctaText": "Book Your Session",
     "ctaLink": "/contact",
     "backgroundImage": "/images/event-banner-bg.jpg",
-    "badge": "Limited Spots Available"
+    "badge": "Early Bird Special - 20% Off"
   },
   "upcomingEvents": [
     {
-      "title": "Corporate Photography Masterclass",
-      "date": "April 20, 2024",
-      "location": "Orchard Central",
+      "title": "Sentosa Beach Pre-Wedding Photoshoot",
+      "date": "February 14, 2025",
+      "location": "Sentosa Island",
       "status": "upcoming"
     },
     {
-      "title": "Social Media Content Creation Workshop",
-      "date": "May 10, 2024", 
-      "location": "Suntec City",
+      "title": "Clarke Quay Night Photography Session",
+      "date": "March 25, 2025", 
+      "location": "Clarke Quay, Singapore River",
+      "status": "upcoming"
+    },
+    {
+      "title": "Chinatown Heritage Photography Walk",
+      "date": "April 15, 2025",
+      "location": "Chinatown Heritage Centre",
       "status": "upcoming"
     }
   ]
