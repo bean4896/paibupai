@@ -53,7 +53,7 @@ export const SG_HOLIDAYS: Record<string, string> = {
   '2027-12-25': 'Christmas Day',
 }
 
-export const BOOKING_OPENS_ON = '2026-09-30'
+export const BOOKING_OPENS_ON = '2026-10-01'
 
 export function todayInSingapore() {
   return new Intl.DateTimeFormat('en-CA', {

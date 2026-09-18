@@ -287,7 +287,7 @@ export default function BookingForm() {
           </div>
         </div>
         <p className="mt-2 text-[11px] leading-relaxed text-cream/40">
-          Monday–Saturday only, from 30 September 2026. Sundays and public holidays are closed. If you need those dates, please call us.
+          Monday–Saturday only, from 1 October 2026. Sundays and public holidays are closed. If you need those dates, please call us.
         </p>
       </div>
 
