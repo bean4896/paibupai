@@ -114,7 +114,7 @@ async function sendViaResend(subject: string, text: string, html: string) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      from: process.env.RESEND_FROM || 'Paibupai Booking <onboarding@resend.dev>',
+      from: process.env.RESEND_FROM || 'Paibupai Booking <booking@paibupai.sg>',
       to: [BOOKING_EMAIL],
       subject,
       text,
@@ -135,7 +135,9 @@ export async function sendBookingEmail(input: BookingMail) {
   const html = buildHtml(input)
   const subject = `Paibupai booking — ${input.date} ${slot.label}`
 
-  if (await sendViaGmail(subject, text, html)) return true
   if (await sendViaResend(subject, text, html)) return true
+  if (await sendViaGmail(subject, text, html)) return true
+
+  console.warn('[booking] No email provider configured. Set RESEND_API_KEY on Vercel.')
   return false
 }
