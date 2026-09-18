@@ -3,46 +3,75 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
+import { useEffect, useRef } from 'react'
 
 function homeHash(isHomePage: boolean, hash: string) {
   return isHomePage ? hash : `/${hash}`
 }
 
-const navLinkClass =
+const desktopNavLinkClass =
   'font-cabinet-grotesk text-[12px] font-bold tracking-[0.16em] text-[#1C1816] uppercase transition hover:text-[#FF5722] md:text-[13px]'
+
+const mobileNavLinkClass =
+  'font-cabinet-grotesk text-[15px] font-bold tracking-[0.18em] text-[#1C1816] uppercase transition hover:text-[#FF5722]'
 
 export default function Header() {
   const pathname = usePathname()
   const isHomePage = pathname === '/'
+  const menuRef = useRef<HTMLDetailsElement>(null)
+
+  const closeMenu = () => {
+    menuRef.current?.removeAttribute('open')
+    document.body.style.overflow = ''
+  }
+
+  useEffect(() => {
+    closeMenu()
+  }, [pathname])
+
+  useEffect(() => {
+    const menu = menuRef.current
+    if (!menu) return
+
+    const onToggle = () => {
+      document.body.style.overflow = menu.open ? 'hidden' : ''
+    }
+
+    menu.addEventListener('toggle', onToggle)
+    return () => {
+      menu.removeEventListener('toggle', onToggle)
+      document.body.style.overflow = ''
+    }
+  }, [])
 
   return (
     <header
       className={
         isHomePage
-          ? 'sticky top-0 w-full z-30 bg-white/95 backdrop-blur-md border-b border-gray-100'
-          : 'absolute w-full z-30'
+          ? 'sticky top-0 z-30 w-full border-b border-gray-100 bg-white/95 backdrop-blur-md'
+          : 'absolute top-0 z-30 w-full has-[[open]]:border-b has-[[open]]:border-gray-100 has-[[open]]:bg-white'
       }
     >
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="flex items-center justify-between h-24 md:h-28 py-4">
-          <div className="shrink-0 mr-4 p-2">
-            <Link className="block group" href="/" aria-label="Paibupai">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        <div className="flex h-16 items-center justify-between md:h-28 md:py-4">
+          <div className="mr-4 shrink-0">
+            <Link className="group block" href="/" aria-label="Paibupai" onClick={closeMenu}>
               <Image
                 src="/logo_paibupai.png"
                 alt="Paibupai Logo"
                 width={3553}
                 height={3547}
-                className="h-[100px] w-auto transition duration-150 ease-in-out group-hover:opacity-80 md:h-[100px]"
+                className="h-12 w-auto transition duration-150 ease-in-out group-hover:opacity-80 md:h-[100px]"
                 priority
               />
             </Link>
           </div>
 
-          <nav className="flex items-center gap-4 sm:gap-6 md:gap-8">
-            <a href={homeHash(isHomePage, '#services')} className={navLinkClass}>
+          <nav className="hidden items-center gap-4 sm:gap-6 md:flex md:gap-8">
+            <a href={homeHash(isHomePage, '#services')} className={desktopNavLinkClass}>
               Our Service
             </a>
-            <a href={homeHash(isHomePage, '#clients')} className={navLinkClass}>
+            <a href={homeHash(isHomePage, '#clients')} className={desktopNavLinkClass}>
               Our Client
             </a>
             <a
@@ -56,6 +85,48 @@ export default function Header() {
               </span>
             </a>
           </nav>
+
+          <details ref={menuRef} className="group relative z-40 shrink-0 md:hidden">
+            <summary
+              className="relative flex h-11 w-11 cursor-pointer list-none items-center justify-center rounded-full [&::-webkit-details-marker]:hidden"
+              aria-label="Menu"
+            >
+              <span className="absolute h-[1.5px] w-5 bg-[#1C1816] transition duration-200 -translate-y-1.5 group-open:translate-y-0 group-open:rotate-45" />
+              <span className="absolute h-[1.5px] w-5 bg-[#1C1816] transition duration-200 group-open:opacity-0" />
+              <span className="absolute h-[1.5px] w-5 bg-[#1C1816] transition duration-200 translate-y-1.5 group-open:translate-y-0 group-open:-rotate-45" />
+            </summary>
+
+            <div className="fixed top-16 right-0 bottom-0 left-0 z-20 bg-[#1C1816]/40" onClick={closeMenu} />
+            <nav className="fixed top-16 right-0 left-0 z-30 border-b border-gray-100 bg-white">
+              <div className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-8">
+                <a
+                  href={homeHash(isHomePage, '#services')}
+                  className={mobileNavLinkClass}
+                  onClick={closeMenu}
+                >
+                  Our Service
+                </a>
+                <a
+                  href={homeHash(isHomePage, '#clients')}
+                  className={mobileNavLinkClass}
+                  onClick={closeMenu}
+                >
+                  Our Client
+                </a>
+                <a
+                  href={homeHash(isHomePage, '#book')}
+                  className="inline-flex w-fit items-center gap-2.5 rounded-full bg-[#1C1816] px-5 py-3 font-cabinet-grotesk text-[13px] font-bold tracking-[0.16em] text-[#FAF9F6] uppercase"
+                  onClick={closeMenu}
+                >
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#FF5722]" />
+                  Book Us
+                  <span aria-hidden="true" className="text-[#FF5722]">
+                    →
+                  </span>
+                </a>
+              </div>
+            </nav>
+          </details>
         </div>
       </div>
     </header>
