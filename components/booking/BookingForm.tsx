@@ -10,6 +10,7 @@ import {
   todayInSingapore,
   type SlotId,
 } from '@/lib/booking/config'
+import { sendBookingViaFormSubmit } from '@/lib/booking/formsubmit'
 
 const businessTypes = [
   'Corporate Brand',
@@ -149,6 +150,22 @@ export default function BookingForm() {
         setSlotId('')
         setError(payload.error || 'Could not submit the booking.')
         return
+      }
+
+      if (!payload.emailSent) {
+        const availability = Array.isArray(payload.slots) ? payload.slots : []
+        void sendBookingViaFormSubmit({
+          name: String(data.get('name') || ''),
+          phone: String(data.get('phone') || ''),
+          businessType: String(data.get('businessType') || ''),
+          serviceInterest: String(data.get('serviceInterest') || ''),
+          date,
+          slotId,
+          remark: String(data.get('remark') || ''),
+          availability,
+        }).catch((error) => {
+          console.error('[booking] FormSubmit failed', error)
+        })
       }
 
       const slot = slots.find((item) => item.id === slotId)

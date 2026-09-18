@@ -63,8 +63,9 @@ export async function POST(request: Request) {
     )
   }
 
+  let emailSent = false
   try {
-    await sendBookingEmail({
+    emailSent = await sendBookingEmail({
       name,
       phone,
       businessType,
@@ -76,14 +77,6 @@ export async function POST(request: Request) {
     })
   } catch (error) {
     console.error('[booking] email failed', error)
-    return NextResponse.json(
-      {
-        error: 'Booking was saved, but the notification email failed. Please follow up manually.',
-        slots: result.availability,
-        saved: true,
-      },
-      { status: 502 },
-    )
   }
 
   const taken = result.availability.find((item) => item.id === slotId)
@@ -94,5 +87,6 @@ export async function POST(request: Request) {
     slotId,
     remaining: taken?.remaining ?? 0,
     slots: result.availability,
+    emailSent,
   })
 }

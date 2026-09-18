@@ -82,13 +82,6 @@ function buildHtml(input: BookingMail) {
   `
 }
 
-function siteOrigin() {
-  if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL.replace(/\/$/, '')
-  if (process.env.VERCEL_PROJECT_PRODUCTION_URL) return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`
-  return 'http://localhost:3000'
-}
-
 async function sendViaGmail(subject: string, text: string, html: string) {
   const user = process.env.GMAIL_USER || BOOKING_EMAIL
   const pass = process.env.GMAIL_APP_PASSWORD
@@ -136,48 +129,13 @@ async function sendViaResend(subject: string, text: string, html: string) {
   return true
 }
 
-async function sendViaFormSubmit(input: BookingMail, subject: string, text: string) {
-  const origin = siteOrigin()
-  const slot = getSlot(input.slotId)
-  const response = await fetch(`https://formsubmit.co/ajax/${BOOKING_EMAIL}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-      Origin: origin,
-      Referer: `${origin}/`,
-    },
-    body: JSON.stringify({
-      _subject: subject,
-      _template: 'box',
-      _captcha: false,
-      name: input.name,
-      phone: input.phone,
-      businessType: input.businessType,
-      serviceInterest: input.serviceInterest,
-      date: `${formatLongDate(input.date)} (${input.date})`,
-      timeSlot: slot.label,
-      remark: input.remark.trim() || '—',
-      remainingToday: remainingLines(input.availability),
-      message: text,
-    }),
-  })
-
-  const payload = (await response.json().catch(() => null)) as { success?: string | boolean; message?: string } | null
-  const ok = payload?.success === true || payload?.success === 'true'
-
-  if (!ok) {
-    throw new Error(payload?.message || `FormSubmit failed: ${response.status}`)
-  }
-}
-
 export async function sendBookingEmail(input: BookingMail) {
   const slot = getSlot(input.slotId)
   const text = buildMessage(input)
   const html = buildHtml(input)
   const subject = `Paibupai booking — ${input.date} ${slot.label}`
 
-  if (await sendViaGmail(subject, text, html)) return
-  if (await sendViaResend(subject, text, html)) return
-  await sendViaFormSubmit(input, subject, text)
+  if (await sendViaGmail(subject, text, html)) return true
+  if (await sendViaResend(subject, text, html)) return true
+  return false
 }
