@@ -53,6 +53,8 @@ export const SG_HOLIDAYS: Record<string, string> = {
   '2027-12-25': 'Christmas Day',
 }
 
+export const BOOKING_OPENS_ON = '2026-09-30'
+
 export function todayInSingapore() {
   return new Intl.DateTimeFormat('en-CA', {
     timeZone: BOOKING_TZ,
@@ -60,6 +62,11 @@ export function todayInSingapore() {
     month: '2-digit',
     day: '2-digit',
   }).format(new Date())
+}
+
+export function earliestBookableDate() {
+  const today = todayInSingapore()
+  return today > BOOKING_OPENS_ON ? today : BOOKING_OPENS_ON
 }
 
 export function parseSingaporeDate(isoDate: string) {
@@ -80,7 +87,7 @@ export function holidayName(isoDate: string) {
 
 export function dateClosedReason(isoDate: string): 'past' | 'sunday' | 'holiday' | null {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(isoDate)) return 'past'
-  if (isoDate < todayInSingapore()) return 'past'
+  if (isoDate < earliestBookableDate()) return 'past'
   if (isSunday(isoDate)) return 'sunday'
   if (holidayName(isoDate)) return 'holiday'
   return null

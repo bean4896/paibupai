@@ -3,11 +3,11 @@
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
 import { FormEvent, useEffect, useMemo, useRef, useState } from 'react'
 import {
+  earliestBookableDate,
   formatLongDate,
   holidayName,
   isSunday,
   parseSingaporeDate,
-  todayInSingapore,
   type SlotId,
 } from '@/lib/booking/config'
 
@@ -52,9 +52,12 @@ function monthLabel(year: number, month: number) {
 }
 
 export default function BookingForm() {
-  const today = todayInSingapore()
-  const todayDate = parseSingaporeDate(today)
-  const [monthCursor, setMonthCursor] = useState({ year: todayDate.getFullYear(), month: todayDate.getMonth() })
+  const firstOpen = earliestBookableDate()
+  const firstOpenDate = parseSingaporeDate(firstOpen)
+  const [monthCursor, setMonthCursor] = useState({
+    year: firstOpenDate.getFullYear(),
+    month: firstOpenDate.getMonth(),
+  })
   const [date, setDate] = useState('')
   const [slotId, setSlotId] = useState<SlotId | ''>('')
   const [slots, setSlots] = useState<SlotState[]>([])
@@ -77,8 +80,8 @@ export default function BookingForm() {
   }, [monthCursor])
 
   const canGoPrev =
-    monthCursor.year > todayDate.getFullYear() ||
-    (monthCursor.year === todayDate.getFullYear() && monthCursor.month > todayDate.getMonth())
+    monthCursor.year > firstOpenDate.getFullYear() ||
+    (monthCursor.year === firstOpenDate.getFullYear() && monthCursor.month > firstOpenDate.getMonth())
 
   useEffect(() => {
     if (!date) {
@@ -259,7 +262,7 @@ export default function BookingForm() {
               if (!cell) return <div key={`empty-${index}`} />
               const closedSunday = isSunday(cell.iso)
               const holiday = holidayName(cell.iso)
-              const past = cell.iso < today
+              const past = cell.iso < firstOpen
               const disabled = closedSunday || Boolean(holiday) || past
               const selected = date === cell.iso
               return (
@@ -284,7 +287,7 @@ export default function BookingForm() {
           </div>
         </div>
         <p className="mt-2 text-[11px] leading-relaxed text-cream/40">
-          Monday–Saturday only. Sundays and public holidays are closed. If you need those dates, please call us.
+          Monday–Saturday only, from 30 September 2026. Sundays and public holidays are closed. If you need those dates, please call us.
         </p>
       </div>
 
