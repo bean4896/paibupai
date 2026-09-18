@@ -1,5 +1,16 @@
 @import "tailwindcss";
 
+@theme {
+  --color-coffee: #1C1816;
+  --color-coffee-soft: #2A2421;
+  --color-cream: #FAF9F6;
+  --color-warm: #F5F4F0;
+  --color-charcoal: #121212;
+  --color-accent: #FF5722;
+  --color-ink: #2C2825;
+  --color-muted: #8A847C;
+}
+
 /* Additional styles */
 @import './additional-styles/utility-patterns.css';
 @import './additional-styles/range-slider.css';
@@ -7,9 +18,33 @@
 @import './additional-styles/theme.css';
 
 /* Additional Tailwind directives: https://tailwindcss.com/docs/functions-and-directives/#responsive */
+@keyframes partner-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
 @layer utilities {
     .rtl {
         direction: rtl;
     }
+
+    .animate-partner-marquee {
+        animation: partner-marquee 60s linear infinite;
+    }
+
+    .animate-partner-marquee-reverse {
+        animation: partner-marquee 60s linear infinite reverse;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-partner-marquee,
+  .animate-partner-marquee-reverse {
+    animation: none;
+  }
 }
 

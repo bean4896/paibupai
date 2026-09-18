@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# booking slot store (local JSON fallback)
+/data/bookings.json

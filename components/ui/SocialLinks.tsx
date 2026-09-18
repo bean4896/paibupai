@@ -1,68 +1,70 @@
-import Link from 'next/link'
-import { ReactElement } from 'react'
 import { socialMediaConfig } from '@/lib/social-config'
-
-interface SocialLink {
-  name: string
-  href: string
-  icon: ReactElement
-  ariaLabel: string
-}
 
 interface SocialLinksProps {
   className?: string
-  iconClassName?: string
+  tone?: 'light' | 'dark'
 }
 
-export default function SocialLinks({ className = '', iconClassName = '' }: SocialLinksProps) {
-  const socialLinks: SocialLink[] = [
-    {
-      name: 'Instagram',
-      href: socialMediaConfig.instagram.url,
-      ariaLabel: 'Follow us on Instagram',
-      icon: (
-        <svg className={`w-8 h-8 fill-current ${iconClassName}`} viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="20.145" cy="11.892" r="1" />
-          <path d="M16 20c-2.206 0-4-1.794-4-4s1.794-4 4-4 4 1.794 4 4-1.794 4-4 4zm0-6c-1.103 0-2 .897-2 2s.897 2 2 2 2-.897 2-2-.897-2-2-2z" />
-          <path d="M20 24h-8c-2.056 0-4-1.944-4-4v-8c0-2.056 1.944-4 4-4h8c2.056 0 4 1.944 4 4v8c0 2.056-1.944 4-4 4zm-8-14c-.935 0-2 1.065-2 2v8c0 .953 1.047 2 2 2h8c.935 0 2-1.065 2-2v-8c0-.935-1.065-2-2-2h-8z" />
-        </svg>
-      ),
-    },
-    {
-      name: 'TikTok',
-      href: socialMediaConfig.tiktok.url,
-      ariaLabel: 'Follow us on TikTok',
-      icon: (
-        <svg className={`w-8 h-8 fill-current ${iconClassName}`} viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-          <path d="M16.656 1.029c1.637-.025 3.262-.012 4.886-.025a7.762 7.762 0 0 0 2.189 5.213l-.002-.002A8.77 8.77 0 0 0 29 8.45l.028.002v5.036a13.327 13.327 0 0 1-5.331-1.247l.082.034a15.385 15.385 0 0 1-2.077-1.196l.052.034c-.012 3.649.012 7.298-.025 10.934a9.513 9.513 0 0 1-1.707 4.954l.02-.031c-1.652 2.366-4.328 3.919-7.371 4.011h-.014a9.071 9.071 0 0 1-5.139-1.31l.04.023C5.05 28.185 3.32 25.603 3 22.6l-.004-.041a23.163 23.163 0 0 1-.012-1.862c.49-4.779 4.494-8.476 9.361-8.476.547 0 1.083.047 1.604.136l-.056-.008c.025 1.849-.05 3.699-.05 5.548a4.29 4.29 0 0 0-5.465 2.619l-.009.03c-.133.427-.21.918-.21 1.426 0 .206.013.41.037.61l-.002-.024a4.26 4.26 0 0 0 4.382 3.586h-.009a4.198 4.198 0 0 0 3.451-1.994l.01-.018c.267-.372.45-.822.511-1.311l.001-.014c.125-2.237.075-4.461.087-6.698.012-5.036-.012-10.06.025-15.083z" />
-        </svg>
-      ),
-    },
-    {
-      name: 'Facebook',
-      href: socialMediaConfig.facebook.url,
-      ariaLabel: 'Follow us on Facebook',
-      icon: (
-        <svg className={`w-8 h-8 fill-current ${iconClassName}`} viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-          <path d="M14.023 24L14 17h-3v-3h3v-2c0-2.7 1.672-4 4.08-4 1.153 0 2.144.086 2.433.124v2.821h-1.67c-1.31 0-1.563.623-1.563 1.536V14H21l-1 3h-2.72v7h-3.257z" />
-        </svg>
-      ),
-    },
-  ]
+const iconClass = 'h-[18px] w-[18px] fill-current'
+
+const icons = {
+  instagram: (
+    <svg className={iconClass} viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z" />
+    </svg>
+  ),
+  tiktok: (
+    <svg className={iconClass} viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z" />
+    </svg>
+  ),
+  facebook: (
+    <svg className={iconClass} viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M24 12.073C24 5.446 18.627.073 12 .073S0 5.446 0 12.073C0 18.063 4.388 23.027 10.125 23.927v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+    </svg>
+  ),
+}
+
+const socials = [
+  {
+    name: 'Instagram',
+    href: socialMediaConfig.instagram.url,
+    ariaLabel: 'Follow us on Instagram',
+    icon: icons.instagram,
+  },
+  {
+    name: 'TikTok',
+    href: socialMediaConfig.tiktok.url,
+    ariaLabel: 'Follow us on TikTok',
+    icon: icons.tiktok,
+  },
+  {
+    name: 'Facebook',
+    href: socialMediaConfig.facebook.url,
+    ariaLabel: 'Follow us on Facebook',
+    icon: icons.facebook,
+  },
+]
+
+export default function SocialLinks({ className = '', tone = 'light' }: SocialLinksProps) {
+  const buttonClass =
+    tone === 'dark'
+      ? 'flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/10 text-[#FAF9F6] transition hover:border-[#FF5722] hover:bg-[#FF5722] hover:text-white'
+      : 'flex h-10 w-10 items-center justify-center rounded-full bg-[#1C1816] text-[#FAF9F6] transition hover:bg-[#FF5722] hover:text-white'
 
   return (
-    <ul className={`inline-flex ${className}`}>
-      {socialLinks.map((social, index) => (
-        <li key={social.name} className={index > 0 ? 'ml-4' : ''}>
-          <Link
+    <ul className={`inline-flex items-center gap-3 ${className}`}>
+      {socials.map((social) => (
+        <li key={social.name}>
+          <a
             href={social.href}
-            className="flex justify-center items-center text-primary-500 bg-primary-100 hover:text-white hover:bg-primary-500 rounded-full transition duration-150 ease-in-out"
+            className={buttonClass}
             aria-label={social.ariaLabel}
             target="_blank"
             rel="noopener noreferrer"
           >
             {social.icon}
-          </Link>
+          </a>
         </li>
       ))}
     </ul>

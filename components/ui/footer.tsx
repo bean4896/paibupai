@@ -24,32 +24,14 @@ export default function Footer() {
           </div>
           {/* Bottom area */}
           <div className="text-center md:flex md:items-center md:justify-between mb-8 md:mb-6">
-            {/* Social links */}
             <SocialLinks className="mb-4 md:order-2 md:ml-4 md:mb-0" />
-            
-            {/* Left links */}
-            <div className="text-sm font-medium md:order-1 space-x-6 mb-2 md:mb-0">
-              <a className="text-gray-500 decoration-primary-500 decoration-2 underline-offset-2 hover:underline" href="/about">
-                About
-              </a>
-              <a className="text-gray-500 decoration-primary-500 decoration-2 underline-offset-2 hover:underline" href="/services">
-                Services
-              </a>
-              <a className="text-gray-500 decoration-primary-500 decoration-2 underline-offset-2 hover:underline" href="/blog">
-                Blog
-              </a>
-              <a className="text-gray-500 decoration-primary-500 decoration-2 underline-offset-2 hover:underline" href="/contact">
-                Contact
-              </a>
-            </div>
           </div>
-          {/* Bottom notes */}
           <div className="text-xs text-gray-400 text-center md:text-left">
             © 2024 Paibupai Photography. All rights reserved. Professional photography services in Singapore.
             We are committed to delivering exceptional visual content for your business and personal needs.
             For inquiries about our services or to discuss your photography requirements, please{' '}
-            <a className="font-medium text-primary-500 decoration-primary-500 underline-offset-2 hover:underline" href="/contact">
-              contact us
+            <a className="font-medium text-primary-500 decoration-primary-500 underline-offset-2 hover:underline" href="/#book">
+              book us
             </a>
             .
           </div>

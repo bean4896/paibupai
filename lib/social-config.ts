@@ -8,13 +8,13 @@ export const socialMediaConfig = {
     name: 'Instagram',
   },
   tiktok: {
-    url: 'https://www.tiktok.com/@paibupai',
-    handle: '@paibupai',
+    url: 'https://www.tiktok.com/@paibupai47',
+    handle: '@paibupai47',
     name: 'TikTok',
   },
   facebook: {
-    url: 'https://www.facebook.com/paibupai',
-    handle: 'paibupai',
+    url: 'https://www.facebook.com/people/Muxin-Wu/100022982443625/',
+    handle: 'Muxin Wu',
     name: 'Facebook',
   },
 }

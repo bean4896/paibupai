@@ -156,3 +156,16 @@
 .swiper-pagination-bullet-active {
     @apply bg-blue-400;
 }
+
+/* Homepage hero banner */
+.hero-banner-pagination .swiper-pagination-bullet {
+    width: 8px;
+    height: 8px;
+    background: #d1d5db;
+    opacity: 1;
+}
+
+.hero-banner-pagination .swiper-pagination-bullet-active {
+    background: #fb4d20;
+    opacity: 1;
+}

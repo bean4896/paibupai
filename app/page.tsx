@@ -1,29 +1,35 @@
 export const metadata = {
   title: 'Home - Paibupai',
-  description: 'Welcome to Paibupai, Singapore\'s premier photography agency. Discover our professional photography, social media marketing, and event planning services.',
+  description:
+    'Singapore content strategy, video production and social media marketing agency. Strategy before shooting. 5 years in Singapore, 300+ businesses served.',
 }
 
-import { EventBanner } from '@/components/ui'
-import Inspiration from '@/components/inspiration'
-import Carousel from '@/components/carousel'
-import Creatives from '@/components/creatives'
-import Pricing from '@/components/pricing'
-import Testimonials from '@/components/testimonials'
-import Faqs from '@/components/faqs'
-import Blog from '@/components/blog'
-import eventsData from '@/data/events.json'
+import HeroBanner from '@/components/hero-banner'
+import {
+  AnnualPartnership,
+  FinalCta,
+  ServicesMatrix,
+  StrategyCore,
+  TailoredSolutions,
+  WhoWeWorkWith,
+  PartnerLogos,
+  WhyPaibupai,
+  Workflow,
+} from '@/components/sections'
 
 export default function Home() {
   return (
     <>
-      <EventBanner event={eventsData.currentEvent} />
-      <Inspiration />
-      <Carousel />
-      <Creatives />
-      <Pricing />
-      <Testimonials />
-      <Faqs />
-      <Blog />
+      <HeroBanner />
+      <ServicesMatrix />
+      <StrategyCore />
+      <TailoredSolutions />
+      <Workflow />
+      <AnnualPartnership />
+      <WhoWeWorkWith />
+      <PartnerLogos />
+      <WhyPaibupai />
+      <FinalCta />
     </>
   )
 }
