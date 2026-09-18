@@ -30,9 +30,9 @@ export default function Footer() {
             © 2024 Paibupai Photography. All rights reserved. Professional photography services in Singapore.
             We are committed to delivering exceptional visual content for your business and personal needs.
             For inquiries about our services or to discuss your photography requirements, please{' '}
-            <a className="font-medium text-primary-500 decoration-primary-500 underline-offset-2 hover:underline" href="/#book">
+            <Link className="font-medium text-primary-500 decoration-primary-500 underline-offset-2 hover:underline" href="/#book">
               book us
-            </a>
+            </Link>
             .
           </div>
         </div>

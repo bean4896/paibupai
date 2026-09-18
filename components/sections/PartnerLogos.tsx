@@ -34,6 +34,8 @@ function LogoTile({ logo }: { logo: PartnerLogo }) {
       }`}
       style={{ width, height: TILE_H }}
     >
+      {/* Native img: Next optimizer 400s on some partner filenames. */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={srcOf(logo.src)}
         alt=""
