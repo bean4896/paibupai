@@ -8,6 +8,8 @@ export type BookingRecord = {
   createdAt: string
   name: string
   phone: string
+  customerType: 'new' | 'existing'
+  customerCode: string
   businessType: string
   serviceInterest: string
   date: string

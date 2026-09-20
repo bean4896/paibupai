@@ -5,12 +5,21 @@ import type { SlotAvailability } from './store'
 type BookingMail = {
   name: string
   phone: string
+  customerType: 'new' | 'existing'
+  customerCode: string
   businessType: string
   serviceInterest: string
   date: string
   slotId: SlotId
   remark: string
   availability: SlotAvailability[]
+}
+
+function customerLine(input: BookingMail) {
+  if (input.customerType === 'existing') {
+    return `Existing customer · ${input.customerCode}`
+  }
+  return 'New customer'
 }
 
 function remainingLines(availability: SlotAvailability[]) {
@@ -32,6 +41,7 @@ function buildMessage(input: BookingMail) {
     '',
     `Name: ${input.name}`,
     `Phone / WhatsApp: ${input.phone}`,
+    `Customer: ${customerLine(input)}`,
     `Business type: ${input.businessType}`,
     `Service interest: ${input.serviceInterest}`,
     `Date: ${formatLongDate(input.date)} (${input.date})`,
@@ -50,6 +60,7 @@ function buildHtml(input: BookingMail) {
   const rows = [
     ['Name', input.name],
     ['Phone / WhatsApp', input.phone],
+    ['Customer', customerLine(input)],
     ['Business type', input.businessType],
     ['Service interest', input.serviceInterest],
     ['Date', `${formatLongDate(input.date)} (${input.date})`],

@@ -76,7 +76,7 @@ export default function Header() {
             </a>
             <a
               href={homeHash(isHomePage, '#book')}
-              className="group inline-flex items-center gap-2.5 rounded-full bg-[#1C1816] px-4 py-2.5 font-cabinet-grotesk text-[12px] font-bold tracking-[0.16em] text-[#FAF9F6] uppercase shadow-[0_8px_20px_rgba(28,24,22,0.18)] transition duration-200 hover:bg-[#2A2421] sm:px-5 md:text-[13px]"
+              className="group inline-flex items-center gap-2.5 rounded-full border-2 border-[#FF5722] bg-[#1C1816] px-4 py-2.5 font-cabinet-grotesk text-[12px] font-bold tracking-[0.16em] text-[#FAF9F6] uppercase shadow-[0_8px_20px_rgba(28,24,22,0.18)] transition duration-200 hover:bg-[#2A2421] sm:px-5 md:text-[13px]"
             >
               <span className="h-1.5 w-1.5 rounded-full bg-[#FF5722] transition-transform duration-200 group-hover:scale-125" />
               Book Us
@@ -115,7 +115,7 @@ export default function Header() {
                 </a>
                 <a
                   href={homeHash(isHomePage, '#book')}
-                  className="inline-flex w-fit items-center gap-2.5 rounded-full bg-[#1C1816] px-5 py-3 font-cabinet-grotesk text-[13px] font-bold tracking-[0.16em] text-[#FAF9F6] uppercase"
+                  className="inline-flex w-fit items-center gap-2.5 rounded-full border-2 border-[#FF5722] bg-[#1C1816] px-5 py-3 font-cabinet-grotesk text-[13px] font-bold tracking-[0.16em] text-[#FAF9F6] uppercase"
                   onClick={closeMenu}
                 >
                   <span className="h-1.5 w-1.5 rounded-full bg-[#FF5722]" />

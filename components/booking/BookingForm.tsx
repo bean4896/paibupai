@@ -4,10 +4,13 @@ import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
 import { FormEvent, useEffect, useMemo, useRef, useState } from 'react'
 import {
   earliestBookableDate,
+  formatCustomerCode,
   formatLongDate,
   holidayName,
   isSunday,
   parseSingaporeDate,
+  type CustomerPrefix,
+  type CustomerType,
   type SlotId,
 } from '@/lib/booking/config'
 
@@ -31,9 +34,10 @@ const serviceInterests = [
 ]
 
 const fieldClass =
-  'w-full rounded-lg border border-white/12 bg-white/4 px-4 py-3 text-sm text-cream outline-none focus:border-accent'
+  'w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-sm text-ink outline-none transition placeholder:text-muted/50 hover:border-black/20 focus:border-accent focus:ring-2 focus:ring-accent/15'
 const selectClass =
-  'w-full rounded-lg border border-white/12 bg-coffee-soft px-4 py-3 text-sm text-cream outline-none focus:border-accent'
+  'w-full cursor-pointer rounded-xl border border-black/10 bg-white px-4 py-3 text-sm text-ink outline-none transition hover:border-black/20 focus:border-accent focus:ring-2 focus:ring-accent/15'
+const labelClass = 'mb-2 block text-[11px] tracking-[0.14em] uppercase text-muted'
 
 type SlotState = {
   id: SlotId
@@ -60,6 +64,9 @@ export default function BookingForm() {
   })
   const [date, setDate] = useState('')
   const [slotId, setSlotId] = useState<SlotId | ''>('')
+  const [customerType, setCustomerType] = useState<CustomerType>('new')
+  const [codePrefix, setCodePrefix] = useState<CustomerPrefix>('P')
+  const [codeNumber, setCodeNumber] = useState('')
   const [slots, setSlots] = useState<SlotState[]>([])
   const [loadingSlots, setLoadingSlots] = useState(false)
   const [submitting, setSubmitting] = useState(false)
@@ -118,10 +125,23 @@ export default function BookingForm() {
     }
   }, [date])
 
+  const formattedCode = customerType === 'existing' ? formatCustomerCode(codePrefix, codeNumber) : null
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     if (!date || !slotId) {
       setError('Please pick a date and time slot.')
+      return
+    }
+    if (!customerType) {
+      setError('Please tell us if you are a new or existing customer.')
+      return
+    }
+
+    const customerCode =
+      customerType === 'existing' ? formatCustomerCode(codePrefix, codeNumber) : ''
+    if (customerType === 'existing' && !customerCode) {
+      setError('Enter a valid client code: P001–P500 or IP001–IP200.')
       return
     }
 
@@ -137,6 +157,8 @@ export default function BookingForm() {
         body: JSON.stringify({
           name: data.get('name'),
           phone: data.get('phone'),
+          customerType,
+          customerCode,
           businessType: data.get('businessType'),
           serviceInterest: data.get('serviceInterest'),
           date,
@@ -160,6 +182,9 @@ export default function BookingForm() {
       setDate('')
       setSlotId('')
       setSlots([])
+      setCustomerType('new')
+      setCodePrefix('P')
+      setCodeNumber('')
     } catch {
       setError('Could not submit the booking. Please try again.')
     } finally {
@@ -169,22 +194,105 @@ export default function BookingForm() {
 
   return (
     <>
-    <form ref={formRef} onSubmit={handleSubmit} className="space-y-5">
-      <div>
-        <label htmlFor="cta-name" className="mb-2 block text-xs tracking-wide text-cream/60">
-          Name
-        </label>
-        <input id="cta-name" name="name" required className={fieldClass} />
-      </div>
-      <div>
-        <label htmlFor="cta-phone" className="mb-2 block text-xs tracking-wide text-cream/60">
-          Phone / WhatsApp
-        </label>
-        <input id="cta-phone" name="phone" required className={fieldClass} />
-      </div>
+    <form
+      ref={formRef}
+      onSubmit={handleSubmit}
+      className="space-y-6 rounded-3xl border border-black/5 bg-white p-6 shadow-[0_16px_48px_rgba(28,24,22,0.06)] md:p-10"
+    >
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
-          <label htmlFor="cta-business" className="mb-2 block text-xs tracking-wide text-cream/60">
+          <label htmlFor="cta-name" className={labelClass}>
+            Name
+          </label>
+          <input id="cta-name" name="name" required className={fieldClass} />
+        </div>
+        <div>
+          <label htmlFor="cta-phone" className={labelClass}>
+            Phone / WhatsApp
+          </label>
+          <input id="cta-phone" name="phone" required className={fieldClass} />
+        </div>
+      </div>
+
+      <div>
+        <p className={labelClass}>Customer</p>
+        <div className="grid gap-2 sm:grid-cols-2" role="radiogroup" aria-label="Customer type">
+          {(
+            [
+              { value: 'new', label: 'New customer' },
+              { value: 'existing', label: 'Existing customer' },
+            ] as const
+          ).map((option) => {
+            const selected = customerType === option.value
+            return (
+              <button
+                key={option.value}
+                type="button"
+                role="radio"
+                aria-checked={selected}
+                onClick={() => {
+                  setCustomerType(option.value)
+                  if (option.value === 'new') setCodeNumber('')
+                }}
+                className={`rounded-xl border px-4 py-3 text-left text-sm font-medium transition ${
+                  selected
+                    ? 'border-accent bg-accent text-white shadow-[0_8px_20px_rgba(255,87,34,0.22)]'
+                    : 'border-accent/50 bg-white text-ink hover:border-accent'
+                }`}
+              >
+                {option.label}
+              </button>
+            )
+          })}
+        </div>
+      </div>
+
+      {customerType === 'existing' ? (
+        <div>
+          <label htmlFor="cta-client-code" className={labelClass}>
+            Client code
+          </label>
+          <div className="flex overflow-hidden rounded-xl border border-accent/50 bg-white transition focus-within:border-accent focus-within:ring-2 focus-within:ring-accent/15">
+            <div className="flex border-r border-accent/30">
+              {(['P', 'IP'] as const).map((prefix) => {
+                const selected = codePrefix === prefix
+                return (
+                  <button
+                    key={prefix}
+                    type="button"
+                    onClick={() => setCodePrefix(prefix)}
+                    className={`min-w-14 px-4 py-3 text-sm font-semibold transition ${
+                      selected ? 'bg-accent text-white' : 'text-muted hover:bg-warm hover:text-ink'
+                    }`}
+                    aria-pressed={selected}
+                  >
+                    {prefix}
+                  </button>
+                )
+              })}
+            </div>
+            <input
+              id="cta-client-code"
+              inputMode="numeric"
+              autoComplete="off"
+              maxLength={3}
+              value={codeNumber}
+              onChange={(event) => setCodeNumber(event.target.value.replace(/\D/g, '').slice(0, 3))}
+              placeholder="Your client code"
+              className="min-w-0 flex-1 border-0 bg-transparent px-4 py-3 text-sm text-ink outline-none placeholder:text-muted/50"
+            />
+            {formattedCode ? (
+              <span className="flex items-center pr-4 font-cabinet-grotesk text-sm font-bold tracking-wide text-coffee">
+                {formattedCode}
+              </span>
+            ) : null}
+          </div>
+        </div>
+      ) : null}
+
+      <div className="grid gap-5 sm:grid-cols-2">
+        <div>
+          <label htmlFor="cta-business" className={labelClass}>
             Business Type
           </label>
           <select id="cta-business" name="businessType" required className={selectClass} defaultValue="">
@@ -199,7 +307,7 @@ export default function BookingForm() {
           </select>
         </div>
         <div>
-          <label htmlFor="cta-service" className="mb-2 block text-xs tracking-wide text-cream/60">
+          <label htmlFor="cta-service" className={labelClass}>
             Service Interest
           </label>
           <select id="cta-service" name="serviceInterest" required className={selectClass} defaultValue="">
@@ -216,8 +324,8 @@ export default function BookingForm() {
       </div>
 
       <div>
-        <p className="mb-2 text-xs tracking-wide text-cream/60">Preferred date</p>
-        <div className="rounded-2xl border border-white/10 bg-white/4 p-4">
+        <p className={labelClass}>Preferred date</p>
+        <div className="max-w-xl rounded-2xl border border-black/5 bg-warm p-4 md:p-5">
           <div className="mb-3 flex items-center justify-between">
             <button
               type="button"
@@ -229,12 +337,14 @@ export default function BookingForm() {
                 )
               }
               disabled={!canGoPrev}
-              className="rounded-full px-3 py-1 text-sm text-cream/70 disabled:opacity-30"
+              className="rounded-full px-3 py-1 text-sm text-ink transition hover:bg-white disabled:opacity-30"
               aria-label="Previous month"
             >
               ←
             </button>
-            <p className="font-cabinet-grotesk text-sm font-bold tracking-wide">{monthLabel(monthCursor.year, monthCursor.month)}</p>
+            <p className="font-cabinet-grotesk text-sm font-bold tracking-wide text-coffee">
+              {monthLabel(monthCursor.year, monthCursor.month)}
+            </p>
             <button
               type="button"
               onClick={() =>
@@ -244,13 +354,13 @@ export default function BookingForm() {
                     : { year: current.year, month: current.month + 1 },
                 )
               }
-              className="rounded-full px-3 py-1 text-sm text-cream/70"
+              className="rounded-full px-3 py-1 text-sm text-ink transition hover:bg-white"
               aria-label="Next month"
             >
               →
             </button>
           </div>
-          <div className="grid grid-cols-7 gap-1 text-center text-[10px] tracking-wide text-cream/40">
+          <div className="grid grid-cols-7 gap-1 text-center text-[10px] tracking-wide text-muted">
             {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((label) => (
               <div key={label} className="py-1">
                 {label}
@@ -271,34 +381,34 @@ export default function BookingForm() {
                   type="button"
                   disabled={disabled}
                   onClick={() => setDate(cell.iso)}
-                  className={`flex h-10 flex-col items-center justify-center rounded-lg text-xs transition ${
+                  className={`flex h-10 flex-col items-center justify-center rounded-lg text-xs outline-none transition ${
                     selected
-                      ? 'bg-accent text-white'
+                      ? 'bg-accent font-semibold text-white'
                       : disabled
-                        ? 'cursor-not-allowed text-cream/25'
-                        : 'text-cream hover:bg-white/8'
+                        ? 'cursor-not-allowed text-coffee/25'
+                        : 'cursor-pointer text-ink hover:bg-white'
                   }`}
                 >
                   {cell.day}
-                  {holiday ? <span className="text-[8px] leading-none text-cream/35">PH</span> : null}
+                  {holiday ? <span className="text-[8px] leading-none text-muted">PH</span> : null}
                 </button>
               )
             })}
           </div>
         </div>
-        <p className="mt-2 text-[11px] leading-relaxed text-cream/40">
+        <p className="mt-2 text-[11px] leading-relaxed text-muted">
           Monday–Saturday only, from 1 October 2026. Sundays and public holidays are closed. If you need those dates, please call us.
         </p>
       </div>
 
       <div>
-        <p className="mb-2 text-xs tracking-wide text-cream/60">Appointment slot</p>
+        <p className={labelClass}>Appointment slot</p>
         {!date ? (
-          <p className="text-sm text-cream/45">Pick a date to see remaining slots.</p>
+          <p className="text-sm text-muted">Pick a date to see appointment times.</p>
         ) : loadingSlots ? (
-          <p className="text-sm text-cream/45">Checking remaining slots…</p>
+          <p className="text-sm text-muted">Loading times…</p>
         ) : (
-          <div className="grid gap-2">
+          <div className="grid gap-2 sm:grid-cols-2">
             {slots.map((slot) => {
               const full = slot.remaining <= 0
               const selected = slotId === slot.id
@@ -308,18 +418,15 @@ export default function BookingForm() {
                   type="button"
                   disabled={full}
                   onClick={() => setSlotId(slot.id)}
-                  className={`flex items-center justify-between rounded-xl border px-4 py-3 text-left text-sm transition ${
+                  className={`rounded-xl border px-4 py-3 text-left text-sm transition ${
                     selected
-                      ? 'border-accent bg-accent text-white'
+                      ? 'border-accent bg-accent text-white shadow-[0_8px_20px_rgba(255,87,34,0.18)]'
                       : full
-                        ? 'cursor-not-allowed border-white/8 text-cream/30'
-                        : 'border-white/12 text-cream hover:border-accent'
+                        ? 'cursor-not-allowed border-accent/20 bg-warm text-coffee/30'
+                        : 'cursor-pointer border-accent/50 bg-white text-ink hover:border-accent'
                   }`}
                 >
-                  <span>{slot.label}</span>
-                  <span className={`text-xs ${selected ? 'text-white/80' : 'text-cream/45'}`}>
-                    {full ? 'Fully booked' : `${slot.remaining} of ${slot.capacity} left`}
-                  </span>
+                  {slot.label}
                 </button>
               )
             })}
@@ -328,7 +435,7 @@ export default function BookingForm() {
       </div>
 
       <div>
-        <label htmlFor="cta-remark" className="mb-2 block text-xs tracking-wide text-cream/60">
+        <label htmlFor="cta-remark" className={labelClass}>
           Remark
         </label>
         <textarea
@@ -336,7 +443,7 @@ export default function BookingForm() {
           name="remark"
           rows={3}
           placeholder="Anything we should know before the meeting"
-          className={`${fieldClass} resize-none placeholder:text-cream/25`}
+          className={`${fieldClass} resize-none`}
         />
       </div>
 
@@ -345,7 +452,7 @@ export default function BookingForm() {
       <button
         type="submit"
         disabled={submitting}
-        className="mt-2 inline-flex rounded-full bg-accent px-7 py-3 text-sm font-medium tracking-wide text-white transition hover:bg-[#e64a19] disabled:opacity-60"
+        className="mt-2 inline-flex items-center gap-2.5 rounded-full border-2 border-accent bg-coffee px-7 py-3 font-cabinet-grotesk text-sm font-bold tracking-[0.16em] text-cream uppercase transition hover:bg-coffee-soft disabled:opacity-60"
       >
         {submitting ? 'SENDING…' : 'GET YOUR CONTENT PLAN'}
       </button>
@@ -372,7 +479,7 @@ export default function BookingForm() {
           <button
             type="button"
             onClick={() => setSuccess(null)}
-            className="mt-7 inline-flex rounded-full bg-[#1C1816] px-6 py-2.5 text-sm font-medium tracking-wide text-[#FAF9F6]"
+            className="mt-7 inline-flex rounded-full border-2 border-accent bg-[#1C1816] px-6 py-2.5 text-sm font-medium tracking-wide text-[#FAF9F6]"
           >
             Close
           </button>

@@ -40,7 +40,7 @@ export default function AnnualPartnership() {
           <div className="lg:col-span-5 lg:text-right">
             <a
               href="#book"
-              className="inline-flex items-center rounded-full border border-accent px-6 py-3 text-sm font-medium tracking-wide text-cream transition hover:bg-accent hover:text-white"
+              className="inline-flex items-center rounded-full border-2 border-accent px-6 py-3 text-sm font-medium tracking-wide text-cream transition hover:bg-accent hover:text-white"
             >
               GET YOUR CONTENT PLAN
             </a>

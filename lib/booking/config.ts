@@ -17,6 +17,39 @@ export function isSlotId(value: string): value is SlotId {
   return SLOT_IDS.includes(value as SlotId)
 }
 
+export const CUSTOMER_TYPES = ['new', 'existing'] as const
+export type CustomerType = (typeof CUSTOMER_TYPES)[number]
+
+export const CUSTOMER_PREFIXES = ['P', 'IP'] as const
+export type CustomerPrefix = (typeof CUSTOMER_PREFIXES)[number]
+
+export const CUSTOMER_CODE_MAX: Record<CustomerPrefix, number> = {
+  P: 500,
+  IP: 200,
+}
+
+export function isCustomerType(value: string): value is CustomerType {
+  return CUSTOMER_TYPES.includes(value as CustomerType)
+}
+
+export function isCustomerPrefix(value: string): value is CustomerPrefix {
+  return CUSTOMER_PREFIXES.includes(value as CustomerPrefix)
+}
+
+export function formatCustomerCode(prefix: CustomerPrefix, rawNumber: string | number): string | null {
+  const digits = String(rawNumber).replace(/\D/g, '')
+  const n = Number(digits)
+  if (!digits || !Number.isInteger(n) || n < 1 || n > CUSTOMER_CODE_MAX[prefix]) return null
+  return `${prefix}${String(n).padStart(3, '0')}`
+}
+
+export function parseCustomerCode(raw: string): string | null {
+  const value = raw.trim().toUpperCase().replace(/[\s-]/g, '')
+  const match = value.match(/^(IP|P)(\d{1,3})$/)
+  if (!match) return null
+  return formatCustomerCode(match[1] as CustomerPrefix, match[2])
+}
+
 export function getSlot(id: SlotId) {
   const slot = TIME_SLOTS.find((item) => item.id === id)
   if (!slot) throw new Error(`Unknown slot: ${id}`)

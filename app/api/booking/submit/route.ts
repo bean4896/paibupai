@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { dateClosedReason, isSlotId } from '@/lib/booking/config'
+import { dateClosedReason, isCustomerType, isSlotId, parseCustomerCode } from '@/lib/booking/config'
 import { sendBookingEmail } from '@/lib/booking/email'
 import { addBooking, BookingStorageError } from '@/lib/booking/store'
 
@@ -18,14 +18,34 @@ export async function POST(request: Request) {
 
   const name = readString(body.name)
   const phone = readString(body.phone)
+  const customerTypeValue = readString(body.customerType)
   const businessType = readString(body.businessType)
   const serviceInterest = readString(body.serviceInterest)
   const date = readString(body.date)
   const slotId = readString(body.slotId)
   const remark = readString(body.remark)
 
-  if (!name || !phone || !businessType || !serviceInterest || !date || !isSlotId(slotId)) {
+  if (
+    !name ||
+    !phone ||
+    !isCustomerType(customerTypeValue) ||
+    !businessType ||
+    !serviceInterest ||
+    !date ||
+    !isSlotId(slotId)
+  ) {
     return NextResponse.json({ error: 'Please fill in all required fields.' }, { status: 400 })
+  }
+
+  const customerType = customerTypeValue
+  const customerCode =
+    customerType === 'existing' ? parseCustomerCode(readString(body.customerCode)) : ''
+
+  if (customerType === 'existing' && !customerCode) {
+    return NextResponse.json(
+      { error: 'Enter a valid client code: P001–P500 or IP001–IP200.' },
+      { status: 400 },
+    )
   }
 
   const closed = dateClosedReason(date)
@@ -41,6 +61,8 @@ export async function POST(request: Request) {
     result = await addBooking({
       name,
       phone,
+      customerType,
+      customerCode: customerCode || '',
       businessType,
       serviceInterest,
       date,
@@ -68,6 +90,8 @@ export async function POST(request: Request) {
     emailSent = await sendBookingEmail({
       name,
       phone,
+      customerType,
+      customerCode: customerCode || '',
       businessType,
       serviceInterest,
       date,
