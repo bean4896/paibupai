@@ -77,6 +77,7 @@ export const packages = [
     fit: 'First diagnostic, a workshop, or one shoot day.',
     includes: ['Account diagnostic', 'Strategy note', 'One production block'],
     href: '/services#pricing',
+    highlight: false,
   },
   {
     id: 'monthly',
@@ -84,6 +85,7 @@ export const packages = [
     fit: 'The brand already knows the direction. Keep showing up.',
     includes: ['Content calendar', 'Shooting + editing cadence', 'Publishing desk'],
     href: '/services#pricing',
+    highlight: false,
   },
   {
     id: 'founder-ip',
@@ -107,5 +109,6 @@ export const packages = [
     fit: 'The catalogue is a starting point. The plan follows the business.',
     includes: ['Industry-specific method', 'Mix of à la carte + retainer', 'Quoted after a call'],
     href: '/#book',
+    highlight: false,
   },
 ] as const
