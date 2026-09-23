@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import Link from 'next/link'
 import { AnimatePresence, motion } from 'framer-motion'
 import { priceCategories, pricePlans, type PriceCategoryId } from '@/data/services'
 import Reveal, { Container } from '@/components/sections/Reveal'
@@ -109,7 +110,7 @@ export default function PricePlans() {
                       </li>
                     ))}
                   </ul>
-                  <a
+                  <Link
                     href="/#book"
                     className={`mt-8 inline-flex items-center justify-center rounded-full border-2 px-4 py-2.5 text-xs font-medium tracking-wide transition ${
                       featured
@@ -118,7 +119,7 @@ export default function PricePlans() {
                     }`}
                   >
                     Book this
-                  </a>
+                  </Link>
                 </motion.article>
               )
             })}

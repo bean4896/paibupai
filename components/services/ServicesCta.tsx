@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import Reveal, { Container } from '@/components/sections/Reveal'
 import ServicePhoto, { photos } from './ServicePhoto'
 
@@ -15,7 +16,7 @@ export default function ServicesCta() {
             <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted">
               Full-service, one shoot day, or 12 months of posting. The plan follows the business — not a catalogue.
             </p>
-            <a
+            <Link
               href="/#book"
               className="mt-10 inline-flex items-center gap-2.5 rounded-full border-2 border-accent bg-coffee px-6 py-3 font-cabinet-grotesk text-sm font-bold tracking-[0.16em] text-cream uppercase transition hover:bg-coffee-soft"
             >
@@ -24,7 +25,7 @@ export default function ServicesCta() {
               <span aria-hidden="true" className="text-accent">
                 →
               </span>
-            </a>
+            </Link>
           </Reveal>
           <Reveal delay={0.08} className="lg:col-span-6">
             <ServicePhoto {...photos.onset} className="aspect-[5/4]" sizes="(min-width: 1152px) 540px, 100vw" />

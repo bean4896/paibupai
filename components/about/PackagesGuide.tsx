@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { packages } from '@/data/about'
 import Reveal, { Container } from '@/components/sections/Reveal'
@@ -43,7 +44,7 @@ export default function PackagesGuide() {
                   </li>
                 ))}
               </ul>
-              <a
+              <Link
                 href={item.href}
                 className={`mt-8 inline-flex items-center justify-center rounded-full border-2 px-4 py-2.5 text-xs font-medium tracking-wide transition ${
                   item.highlight
@@ -52,7 +53,7 @@ export default function PackagesGuide() {
                 }`}
               >
                 See this
-              </a>
+              </Link>
             </motion.article>
           ))}
         </div>

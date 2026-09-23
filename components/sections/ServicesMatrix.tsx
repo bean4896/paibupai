@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { services } from '@/data/homepage'
 import Reveal, { Container } from './Reveal'
@@ -74,7 +75,7 @@ export default function ServicesMatrix() {
         </div>
 
         <Reveal delay={0.12} className="mt-10">
-          <a
+          <Link
             href="/services"
             className="inline-flex items-center gap-2 text-sm font-medium tracking-wide text-ink transition hover:text-accent"
           >
@@ -82,7 +83,7 @@ export default function ServicesMatrix() {
             <span aria-hidden="true" className="text-accent">
               →
             </span>
-          </a>
+          </Link>
         </Reveal>
       </Container>
     </section>
