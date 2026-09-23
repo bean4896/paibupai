@@ -72,6 +72,18 @@ export default function ServicesMatrix() {
             )
           })}
         </div>
+
+        <Reveal delay={0.12} className="mt-10">
+          <a
+            href="/services"
+            className="inline-flex items-center gap-2 text-sm font-medium tracking-wide text-ink transition hover:text-accent"
+          >
+            Full breakdown, featured modules and pricing
+            <span aria-hidden="true" className="text-accent">
+              →
+            </span>
+          </a>
+        </Reveal>
       </Container>
     </section>
   )

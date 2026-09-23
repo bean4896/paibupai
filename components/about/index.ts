@@ -1,0 +1,5 @@
+export { default as AboutHero } from './AboutHero'
+export { default as BrandStory } from './BrandStory'
+export { default as BrandFilm } from './BrandFilm'
+export { default as TeamGrid } from './TeamGrid'
+export { default as PackagesGuide } from './PackagesGuide'

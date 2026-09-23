@@ -1,0 +1,6 @@
+export { default as ServicesHero } from './ServicesHero'
+export { default as ServiceBreakdown } from './ServiceBreakdown'
+export { default as FeaturedModules } from './FeaturedModules'
+export { default as IndustriesGrid } from './IndustriesGrid'
+export { default as PricePlans } from './PricePlans'
+export { default as ServicesCta } from './ServicesCta'

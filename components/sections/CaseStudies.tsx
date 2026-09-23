@@ -6,13 +6,11 @@ import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
 import { caseCategories, caseStudies, type CaseStudy } from '@/data/homepage'
 import Reveal, { Container } from './Reveal'
 
-const steps: { key: keyof Pick<CaseStudy, 'problem' | 'strategy' | 'shoot' | 'operations' | 'outcome'>; label: string }[] = [
-  { key: 'problem', label: '01 Client Problem' },
-  { key: 'strategy', label: '02 Strategy' },
-  { key: 'shoot', label: '03 Shoot Concept' },
-  { key: 'operations', label: '04 Operations' },
-  { key: 'outcome', label: '05 Result' },
-]
+const steps = [
+  { key: 'problem', label: 'Client problem' },
+  { key: 'plan', label: 'Strategy & shoot' },
+  { key: 'outcome', label: 'Result' },
+] as const
 
 export default function CaseStudies() {
   const [active, setActive] = useState('all')
@@ -24,14 +22,14 @@ export default function CaseStudies() {
   )
 
   return (
-    <section className="bg-cream py-20 md:py-28" id="work">
+    <section className="scroll-mt-28 bg-cream py-20 md:py-28" id="cases">
       <Container>
         <Reveal>
           <h2 className="font-cabinet-grotesk text-3xl font-extrabold tracking-tight text-ink md:text-5xl">
-            OUR WORK
+            CASE STUDIES
           </h2>
-          <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted">
-            We don&apos;t show a highlight reel. We show a method: the problem, the strategy, what we shoot, how we operate, and the content direction that follows.
+          <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted md:text-lg">
+            Client problem → strategy and shoot plan → what it converted. Not a montage.
           </p>
         </Reveal>
 
@@ -71,7 +69,7 @@ export default function CaseStudies() {
                 <p className="text-[11px] tracking-[0.18em] text-accent uppercase">{item.industry}</p>
                 <h3 className="font-cabinet-grotesk mt-3 text-lg font-bold text-ink">{item.client}</h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted">{item.result}</p>
-                <p className="mt-6 text-xs tracking-wide text-ink/50">View 5-step breakdown →</p>
+                <p className="mt-6 text-xs tracking-wide text-ink/50">View case →</p>
               </motion.button>
             ))}
           </AnimatePresence>
@@ -103,10 +101,16 @@ export default function CaseStudies() {
                   <div className="mt-8 space-y-6">
                     {steps.map((step) => (
                       <div key={step.key} className="border-t border-black/8 pt-5">
-                        <p className="text-[11px] tracking-[0.16em] text-accent uppercase">
-                          {step.label}
-                        </p>
-                        <p className="mt-2 text-sm leading-relaxed text-ink/80">{selected[step.key]}</p>
+                        <p className="text-[11px] tracking-[0.16em] text-accent uppercase">{step.label}</p>
+                        {step.key === 'plan' ? (
+                          <div className="mt-2 space-y-3 text-sm leading-relaxed text-ink/80">
+                            <p>{selected.strategy}</p>
+                            <p>{selected.shoot}</p>
+                            <p className="text-muted">{selected.operations}</p>
+                          </div>
+                        ) : (
+                          <p className="mt-2 text-sm leading-relaxed text-ink/80">{selected[step.key]}</p>
+                        )}
                       </div>
                     ))}
                   </div>

@@ -5,6 +5,7 @@ import AOS from 'aos'
 import 'aos/dist/aos.css'
 import Header from '@/components/ui/header'
 import Footer from '@/components/ui/footer'
+import WhatsAppButton from '@/components/ui/WhatsAppButton'
 
 export default function ClientLayout({
   children,
@@ -25,6 +26,7 @@ export default function ClientLayout({
       <Header />
       <main className="grow">{children}</main>
       <Footer />
+      <WhatsAppButton />
     </>
   )
 }

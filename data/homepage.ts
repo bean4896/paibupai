@@ -85,6 +85,29 @@ export const services = [
   },
 ] as const
 
+export const shootReels = [
+  {
+    id: 'technique',
+    title: 'Shooting technique',
+    copy: 'Lighting, directing and on-set decisions — not lucky shots.',
+  },
+  {
+    id: 'business',
+    title: 'Business filming',
+    copy: 'Product, service and next-step content that a customer can act on.',
+  },
+  {
+    id: 'founder',
+    title: 'Founder on camera',
+    copy: 'IP that sounds like the person, not a script.',
+  },
+  {
+    id: 'edit',
+    title: 'Cut for the account',
+    copy: 'Edits built for publishing, not for awards.',
+  },
+] as const
+
 export const workflowSteps = [
   {
     id: 'strategy',

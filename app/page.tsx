@@ -15,19 +15,21 @@ import {
   PartnerLogos,
   WhyPaibupai,
   Workflow,
+  VideoShowcase,
 } from '@/components/sections'
 
 export default function Home() {
   return (
     <>
       <HeroBanner />
+      <VideoShowcase />
       <ServicesMatrix />
+      <WhoWeWorkWith />
+      <PartnerLogos />
       <StrategyCore />
       <TailoredSolutions />
       <Workflow />
       <AnnualPartnership />
-      <WhoWeWorkWith />
-      <PartnerLogos />
       <WhyPaibupai />
       <FinalCta />
     </>

@@ -1,4 +1,5 @@
 export { default as ServicesMatrix } from './ServicesMatrix'
+export { default as VideoShowcase } from './VideoShowcase'
 export { default as StrategyCore } from './StrategyCore'
 export { default as TailoredSolutions } from './TailoredSolutions'
 export { default as Workflow } from './Workflow'

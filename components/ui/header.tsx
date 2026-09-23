@@ -18,6 +18,10 @@ const mobileNavLinkClass =
 export default function Header() {
   const pathname = usePathname()
   const isHomePage = pathname === '/'
+  const isServicesPage = pathname.startsWith('/services')
+  const isAboutPage = pathname.startsWith('/about')
+  const isWorkPage = pathname.startsWith('/portfolio')
+  const stickyHeader = isHomePage || isServicesPage || isAboutPage || isWorkPage
   const menuRef = useRef<HTMLDetailsElement>(null)
 
   const closeMenu = () => {
@@ -47,7 +51,7 @@ export default function Header() {
   return (
     <header
       className={
-        isHomePage
+        stickyHeader
           ? 'sticky top-0 z-30 w-full border-b border-gray-100 bg-white/95 backdrop-blur-md'
           : 'absolute top-0 z-30 w-full has-[[open]]:border-b has-[[open]]:border-gray-100 has-[[open]]:bg-white'
       }
@@ -68,9 +72,24 @@ export default function Header() {
           </div>
 
           <nav className="hidden items-center gap-4 sm:gap-6 md:flex md:gap-8">
-            <a href={homeHash(isHomePage, '#services')} className={desktopNavLinkClass}>
+            <Link
+              href="/services"
+              className={`${desktopNavLinkClass} ${isServicesPage ? 'text-[#FF5722]' : ''}`}
+            >
               Our Service
-            </a>
+            </Link>
+            <Link
+              href="/portfolio"
+              className={`${desktopNavLinkClass} ${isWorkPage ? 'text-[#FF5722]' : ''}`}
+            >
+              Our Work
+            </Link>
+            <Link
+              href="/about"
+              className={`${desktopNavLinkClass} ${isAboutPage ? 'text-[#FF5722]' : ''}`}
+            >
+              About
+            </Link>
             <a href={homeHash(isHomePage, '#clients')} className={desktopNavLinkClass}>
               Our Client
             </a>
@@ -99,13 +118,27 @@ export default function Header() {
             <div className="fixed top-16 right-0 bottom-0 left-0 z-20 bg-[#1C1816]/40" onClick={closeMenu} />
             <nav className="fixed top-16 right-0 left-0 z-30 border-b border-gray-100 bg-white">
               <div className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-8">
-                <a
-                  href={homeHash(isHomePage, '#services')}
-                  className={mobileNavLinkClass}
+                <Link
+                  href="/services"
+                  className={`${mobileNavLinkClass} ${isServicesPage ? 'text-[#FF5722]' : ''}`}
                   onClick={closeMenu}
                 >
                   Our Service
-                </a>
+                </Link>
+                <Link
+                  href="/portfolio"
+                  className={`${mobileNavLinkClass} ${isWorkPage ? 'text-[#FF5722]' : ''}`}
+                  onClick={closeMenu}
+                >
+                  Our Work
+                </Link>
+                <Link
+                  href="/about"
+                  className={`${mobileNavLinkClass} ${isAboutPage ? 'text-[#FF5722]' : ''}`}
+                  onClick={closeMenu}
+                >
+                  About
+                </Link>
                 <a
                   href={homeHash(isHomePage, '#clients')}
                   className={mobileNavLinkClass}

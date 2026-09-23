@@ -13,6 +13,8 @@ import {
   type CustomerType,
   type SlotId,
 } from '@/lib/booking/config'
+import { bookingWhatsAppMessage, whatsappUrl } from '@/lib/whatsapp'
+import WhatsAppIcon from '@/components/ui/WhatsAppIcon'
 
 const businessTypes = [
   'Corporate Brand',
@@ -47,6 +49,18 @@ type SlotState = {
   remaining: number
 }
 
+type SuccessState = {
+  name: string
+  phone: string
+  customerType: CustomerType
+  customerCode: string
+  businessType: string
+  serviceInterest: string
+  date: string
+  slot: string
+  remark: string
+}
+
 function toIsoDate(year: number, month: number, day: number) {
   return `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`
 }
@@ -71,7 +85,7 @@ export default function BookingForm() {
   const [loadingSlots, setLoadingSlots] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
-  const [success, setSuccess] = useState<{ date: string; slot: string } | null>(null)
+  const [success, setSuccess] = useState<SuccessState | null>(null)
   const formRef = useRef<HTMLFormElement>(null)
 
   const days = useMemo(() => {
@@ -177,7 +191,17 @@ export default function BookingForm() {
       }
 
       const slot = slots.find((item) => item.id === slotId)
-      setSuccess({ date, slot: slot?.label || slotId })
+      setSuccess({
+        name: String(data.get('name') || ''),
+        phone: String(data.get('phone') || ''),
+        customerType,
+        customerCode: customerCode || '',
+        businessType: String(data.get('businessType') || ''),
+        serviceInterest: String(data.get('serviceInterest') || ''),
+        date,
+        slot: slot?.label || slotId,
+        remark: String(data.get('remark') || ''),
+      })
       formRef.current?.reset()
       setDate('')
       setSlotId('')
@@ -474,15 +498,40 @@ export default function BookingForm() {
             {success ? `${formatLongDate(success.date)} · ${success.slot}` : ''}
           </p>
           <p className="mt-2 text-sm leading-relaxed text-[#8A847C]">
-            We&apos;ll follow up based on your business type and needs.
+            We&apos;ll follow up based on your business type and needs. You can also message us on WhatsApp with this booking.
           </p>
-          <button
-            type="button"
-            onClick={() => setSuccess(null)}
-            className="mt-7 inline-flex rounded-full border-2 border-accent bg-[#1C1816] px-6 py-2.5 text-sm font-medium tracking-wide text-[#FAF9F6]"
-          >
-            Close
-          </button>
+          <div className="mt-7 flex flex-wrap items-center gap-3">
+            {success ? (
+              <a
+                href={whatsappUrl(
+                  bookingWhatsAppMessage({
+                    name: success.name,
+                    phone: success.phone,
+                    customerType: success.customerType,
+                    customerCode: success.customerCode,
+                    businessType: success.businessType,
+                    serviceInterest: success.serviceInterest,
+                    dateLabel: formatLongDate(success.date),
+                    slot: success.slot,
+                    remark: success.remark,
+                  }),
+                )}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-full border-2 border-accent bg-[#25D366] px-5 py-2.5 text-sm font-medium tracking-wide text-white transition hover:bg-[#1ebe5d]"
+              >
+                <WhatsAppIcon className="h-4 w-4" />
+                Contact us
+              </a>
+            ) : null}
+            <button
+              type="button"
+              onClick={() => setSuccess(null)}
+              className="inline-flex rounded-full border-2 border-accent bg-[#1C1816] px-6 py-2.5 text-sm font-medium tracking-wide text-[#FAF9F6]"
+            >
+              Close
+            </button>
+          </div>
         </DialogPanel>
       </div>
     </Dialog>
