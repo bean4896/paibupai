@@ -1,4 +1,4 @@
-export const BOOKING_EMAIL = process.env.BOOKING_EMAIL || 'muxinphotographer@gmail.com'
+export const BOOKING_EMAIL = process.env.BOOKING_EMAIL || 'paibupai.sg@gmail.com'
 export const BOOKING_TZ = 'Asia/Singapore'
 
 export const TIME_SLOTS = [

@@ -12,10 +12,6 @@ const banners = [
     alt: 'One Year of Content — 12-month content plan and social media posting management',
   },
   {
-    src: '/static/banner2.jpg',
-    alt: 'Mid-Autumn $815 Special — 10 short videos plus social media posting',
-  },
-  {
     src: '/static/banner3.jpg',
     alt: 'Make Your Business Seen — Paibupai one-stop content team in Singapore',
   },
