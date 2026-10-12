@@ -2,19 +2,35 @@ export const BOOKING_EMAIL = process.env.BOOKING_EMAIL || 'paibupai.sg@gmail.com
 export const BOOKING_TZ = 'Asia/Singapore'
 
 export const TIME_SLOTS = [
-  { id: 'morning', label: '9:45 AM – 12:45 PM', capacity: 3 },
+  { id: 'morning', label: '9:30 AM – 1:00 PM', capacity: 4 },
+  { id: 'afternoon', label: '2:30 PM – 6:30 PM', capacity: 4 },
+  { id: 'evening', label: '6:30 PM – 9:00 PM', capacity: 2 },
+] as const
+
+/** Retired windows kept so existing bookings still parse and display. */
+export const LEGACY_SLOTS = [
   { id: 'midday', label: '12:00 PM – 2:00 PM', capacity: 1 },
-  { id: 'afternoon', label: '2:45 PM – 5:45 PM', capacity: 3 },
-  { id: 'evening', label: '6:30 PM – 9:00 PM', capacity: 1 },
   { id: 'fullday', label: 'Full day', capacity: 2 },
 ] as const
 
-export type SlotId = (typeof TIME_SLOTS)[number]['id']
+export const ALL_SLOTS = [...TIME_SLOTS, ...LEGACY_SLOTS] as const
 
-export const SLOT_IDS = TIME_SLOTS.map((slot) => slot.id)
+export type BookableSlotId = (typeof TIME_SLOTS)[number]['id']
+export type SlotId = (typeof ALL_SLOTS)[number]['id']
+
+export const SLOT_IDS = ALL_SLOTS.map((slot) => slot.id)
+export const BOOKABLE_SLOT_IDS = TIME_SLOTS.map((slot) => slot.id)
 
 export function isSlotId(value: string): value is SlotId {
   return SLOT_IDS.includes(value as SlotId)
+}
+
+export function isBookableSlotId(value: string): value is BookableSlotId {
+  return BOOKABLE_SLOT_IDS.includes(value as BookableSlotId)
+}
+
+export function slotLabel(id: string) {
+  return ALL_SLOTS.find((slot) => slot.id === id)?.label ?? id
 }
 
 export const CUSTOMER_TYPES = ['new', 'existing'] as const
@@ -51,9 +67,25 @@ export function parseCustomerCode(raw: string): string | null {
 }
 
 export function getSlot(id: SlotId) {
-  const slot = TIME_SLOTS.find((item) => item.id === id)
+  const slot = ALL_SLOTS.find((item) => item.id === id)
   if (!slot) throw new Error(`Unknown slot: ${id}`)
   return slot
+}
+
+export function addCalendarDays(isoDate: string, days: number) {
+  const [year, month, day] = isoDate.split('-').map(Number)
+  const next = new Date(Date.UTC(year, month - 1, day + days))
+  return next.toISOString().slice(0, 10)
+}
+
+export function upcomingOpenDates(count = 14, from = todayInSingapore()) {
+  const dates: string[] = []
+  let cursor = from
+  for (let i = 0; i < 90 && dates.length < count; i += 1) {
+    if (!dateClosedReason(cursor)) dates.push(cursor)
+    cursor = addCalendarDays(cursor, 1)
+  }
+  return dates
 }
 
 /** Singapore gazette holidays + weekday-in-lieu dates, 2026–2027. */

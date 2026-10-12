@@ -5,6 +5,7 @@ export const metadata = {
 }
 
 import HeroBanner from '@/components/hero-banner'
+import { getBanners } from '@/lib/banners/store'
 import {
   AnnualPartnership,
   FinalCta,
@@ -17,10 +18,12 @@ import {
   Workflow,
 } from '@/components/sections'
 
-export default function Home() {
+export default async function Home() {
+  const banners = await getBanners()
+
   return (
     <>
-      <HeroBanner />
+      <HeroBanner banners={banners} />
       <ServicesMatrix />
       <StrategyCore />
       <TailoredSolutions />

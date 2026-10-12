@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { dateClosedReason, isCustomerType, isSlotId, parseCustomerCode } from '@/lib/booking/config'
+import { dateClosedReason, isBookableSlotId, isCustomerType, parseCustomerCode } from '@/lib/booking/config'
 import { sendBookingEmail } from '@/lib/booking/email'
 import { addBooking, BookingStorageError } from '@/lib/booking/store'
 
@@ -32,7 +32,7 @@ export async function POST(request: Request) {
     !businessType ||
     !serviceInterest ||
     !date ||
-    !isSlotId(slotId)
+    !isBookableSlotId(slotId)
   ) {
     return NextResponse.json({ error: 'Please fill in all required fields.' }, { status: 400 })
   }

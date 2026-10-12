@@ -5,26 +5,40 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import { Autoplay, Pagination, Keyboard, A11y } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/pagination'
+import { DEFAULT_BANNERS, type BannerSlide } from '@/lib/banners/types'
 
-const banners = [
-  {
-    src: '/static/banner1.jpg',
-    alt: 'One Year of Content — 12-month content plan and social media posting management',
-  },
-  {
-    src: '/static/banner3.jpg',
-    alt: 'Make Your Business Seen — Paibupai one-stop content team in Singapore',
-  },
-]
+function BannerMedia({ src, alt, priority }: { src: string; alt: string; priority?: boolean }) {
+  const remote = src.startsWith('http://') || src.startsWith('https://')
 
-export default function HeroBanner() {
+  if (remote) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img src={src} alt={alt} className="absolute inset-0 h-full w-full object-contain" />
+    )
+  }
+
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      fill
+      priority={priority}
+      className="object-contain"
+      sizes="(min-width: 1152px) 1152px, 100vw"
+    />
+  )
+}
+
+export default function HeroBanner({ banners = DEFAULT_BANNERS }: { banners?: BannerSlide[] }) {
+  const slides = banners.length > 0 ? banners : DEFAULT_BANNERS
+
   return (
     <section className="hero-banner w-full bg-cream" aria-label="Featured campaigns">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-6 md:pt-8">
         <div className="overflow-hidden rounded-2xl">
           <Swiper
             modules={[Autoplay, Pagination, Keyboard, A11y]}
-            loop
+            loop={slides.length > 1}
             speed={700}
             autoplay={{
               delay: 5000,
@@ -37,17 +51,10 @@ export default function HeroBanner() {
             }}
             keyboard={{ enabled: true }}
           >
-            {banners.map((banner, index) => (
-              <SwiperSlide key={banner.src}>
-                <a href="#book" className="relative block aspect-[16/9] w-full">
-                  <Image
-                    src={banner.src}
-                    alt={banner.alt}
-                    fill
-                    priority={index === 0}
-                    className="object-contain"
-                    sizes="(min-width: 1152px) 1152px, 100vw"
-                  />
+            {slides.map((banner, index) => (
+              <SwiperSlide key={`${banner.id}-${banner.src}`}>
+                <a href={banner.href || '#book'} className="relative block aspect-[16/9] w-full">
+                  <BannerMedia src={banner.src} alt={banner.alt} priority={index === 0} />
                 </a>
               </SwiperSlide>
             ))}

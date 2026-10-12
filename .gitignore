@@ -42,3 +42,4 @@ next-env.d.ts
 
 # booking slot store (local JSON fallback)
 /data/bookings.json
+/data/banners.json
