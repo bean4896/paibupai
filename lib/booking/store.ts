@@ -1,7 +1,7 @@
 import { promises as fs } from 'fs'
 import path from 'path'
 import { get, put } from '@vercel/blob'
-import { getSlot, SLOT_IDS, TIME_SLOTS, type SlotId } from './config'
+import { getSlot, isSlotId, TIME_SLOTS, type SlotId } from './config'
 
 export type BookingRecord = {
   id: string
@@ -186,7 +186,7 @@ function countsFromBookings(bookings: BookingRecord[], date: string): SlotAvaila
 
 export async function getSlotAvailability(date: string): Promise<SlotAvailability[]> {
   if (bookingStorageKind() === 'redis') {
-    const results = await redisPipeline(SLOT_IDS.map((id) => ['GET', `${REDIS_PREFIX}${date}:${id}`]))
+    const results = await redisPipeline(TIME_SLOTS.map((slot) => ['GET', `${REDIS_PREFIX}${date}:${slot.id}`]))
     return TIME_SLOTS.map((slot, index) => {
       const booked = Number(results[index]?.result ?? 0) || 0
       return {
@@ -201,6 +201,107 @@ export async function getSlotAvailability(date: string): Promise<SlotAvailabilit
 
   const store = await readJsonStore()
   return countsFromBookings(store.bookings, date)
+}
+
+function parseBookingRecord(value: unknown): BookingRecord | null {
+  if (!value || typeof value !== 'object') return null
+  const item = value as Partial<BookingRecord>
+  const slotId = typeof item.slotId === 'string' ? item.slotId : ''
+  if (
+    typeof item.id !== 'string' ||
+    typeof item.createdAt !== 'string' ||
+    typeof item.name !== 'string' ||
+    typeof item.phone !== 'string' ||
+    typeof item.date !== 'string' ||
+    !isSlotId(slotId)
+  ) {
+    return null
+  }
+
+  return {
+    id: item.id,
+    createdAt: item.createdAt,
+    name: item.name,
+    phone: item.phone,
+    customerType: item.customerType === 'existing' ? 'existing' : 'new',
+    customerCode: typeof item.customerCode === 'string' ? item.customerCode : '',
+    businessType: typeof item.businessType === 'string' ? item.businessType : '',
+    serviceInterest: typeof item.serviceInterest === 'string' ? item.serviceInterest : '',
+    date: item.date,
+    slotId,
+    remark: typeof item.remark === 'string' ? item.remark : '',
+  }
+}
+
+export async function listBookings(): Promise<BookingRecord[]> {
+  const kind = bookingStorageKind()
+  if (kind === 'unconfigured') return []
+
+  if (kind === 'redis') {
+    const rows = (await redisCommand<string[] | null>(['LRANGE', `${REDIS_PREFIX}log`, 0, 499])) ?? []
+    return rows
+      .map((row) => {
+        try {
+          return parseBookingRecord(JSON.parse(row))
+        } catch {
+          return null
+        }
+      })
+      .filter((item): item is BookingRecord => Boolean(item))
+  }
+
+  const store = await readJsonStore()
+  return [...store.bookings].sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+}
+
+export async function deleteBookings(ids: string[]) {
+  const uniqueIds = [...new Set(ids.filter(Boolean))]
+  if (!uniqueIds.length) return { deleted: 0, bookings: await listBookings() }
+
+  return withLock(async () => {
+    if (bookingStorageKind() === 'redis') {
+      const rows = (await redisCommand<string[] | null>(['LRANGE', `${REDIS_PREFIX}log`, 0, 499])) ?? []
+      const keep: string[] = []
+      let deleted = 0
+      const decr = new Map<string, number>()
+
+      for (const row of rows) {
+        try {
+          const parsed = parseBookingRecord(JSON.parse(row))
+          if (parsed && uniqueIds.includes(parsed.id)) {
+            deleted += 1
+            const key = `${REDIS_PREFIX}${parsed.date}:${parsed.slotId}`
+            decr.set(key, (decr.get(key) ?? 0) + 1)
+            continue
+          }
+        } catch {
+          // keep unreadable rows
+        }
+        keep.push(row)
+      }
+
+      const commands: (string | number)[][] = [['DEL', `${REDIS_PREFIX}log`]]
+      if (keep.length) {
+        commands.push(['RPUSH', `${REDIS_PREFIX}log`, ...keep.reverse()])
+      }
+      for (const [key, count] of decr) {
+        commands.push(['DECRBY', key, count])
+      }
+      if (commands.length > 1 || keep.length === 0) {
+        await redisPipeline(commands)
+      }
+
+      return { deleted, bookings: await listBookings() }
+    }
+
+    const store = await readJsonStore()
+    const next = store.bookings.filter((item) => !uniqueIds.includes(item.id))
+    const deleted = store.bookings.length - next.length
+    if (deleted) {
+      await writeJsonStore({ bookings: next })
+    }
+    return { deleted, bookings: [...next].sort((a, b) => b.createdAt.localeCompare(a.createdAt)) }
+  })
 }
 
 export async function addBooking(input: Omit<BookingRecord, 'id' | 'createdAt'>) {
