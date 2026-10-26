@@ -4,7 +4,8 @@ import { useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   formatLongDate,
-  slotLabel,
+  slotLabelForDate,
+  slotsForDate,
   TIME_SLOTS,
   todayInSingapore,
   upcomingOpenDates,
@@ -51,7 +52,7 @@ function emptyBanner(index: number): BannerSlide {
 }
 
 function occupancy(rows: BookingRow[], date: string) {
-  return TIME_SLOTS.map((slot) => {
+  return slotsForDate(date).map((slot) => {
     const booked = rows.filter((item) => item.date === date && item.slotId === slot.id).length
     return { ...slot, booked, remaining: Math.max(0, slot.capacity - booked) }
   })
@@ -151,7 +152,7 @@ export default function Dashboard({ banners, bookings, bannerStorage, bookingSto
           <p className="text-[11px] tracking-[0.22em] text-accent uppercase">Internal</p>
           <h1 className="font-cabinet-grotesk mt-2 text-3xl font-extrabold tracking-tight">Booking dashboard</h1>
           <p className="mt-2 text-sm text-muted">
-            9:30–1:00 × 4 · 2:30–6:30 × 4 · 6:30–9:00 × 2. Storage: {bookingStorage}.
+            From Nov: Mon–Fri 4/4/2 · Sat 3/3/2 · Sun 1/1. Afternoon 3:15–6:30. Storage: {bookingStorage}.
           </p>
         </div>
         <button
@@ -323,7 +324,7 @@ export default function Dashboard({ banners, bookings, bannerStorage, bookingSto
                   <tr key={booking.id} className="border-t border-black/5 align-top">
                     <td className="px-4 py-3">
                       <div className="font-medium">{booking.date}</div>
-                      <div className="text-muted">{slotLabel(booking.slotId)}</div>
+                      <div className="text-muted">{slotLabelForDate(booking.date, booking.slotId)}</div>
                     </td>
                     <td className="px-4 py-3 font-medium">{booking.name}</td>
                     <td className="px-4 py-3">{booking.phone}</td>

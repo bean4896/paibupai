@@ -1,11 +1,19 @@
 export const BOOKING_EMAIL = process.env.BOOKING_EMAIL || 'paibupai.sg@gmail.com'
 export const BOOKING_TZ = 'Asia/Singapore'
 
+export const NOVEMBER_SCHEDULE_FROM = '2026-11-01'
+
 export const TIME_SLOTS = [
   { id: 'morning', label: '9:30 AM – 1:00 PM', capacity: 4 },
-  { id: 'afternoon', label: '2:30 PM – 6:30 PM', capacity: 4 },
+  { id: 'afternoon', label: '3:15 PM – 6:30 PM', capacity: 4 },
   { id: 'evening', label: '6:30 PM – 9:00 PM', capacity: 2 },
 ] as const
+
+export type BookableSlot = {
+  id: BookableSlotId
+  label: string
+  capacity: number
+}
 
 /** Retired windows kept so existing bookings still parse and display. */
 export const LEGACY_SLOTS = [
@@ -70,6 +78,61 @@ export function getSlot(id: SlotId) {
   const slot = ALL_SLOTS.find((item) => item.id === id)
   if (!slot) throw new Error(`Unknown slot: ${id}`)
   return slot
+}
+
+export function usesNovemberSchedule(isoDate: string) {
+  return isoDate >= NOVEMBER_SCHEDULE_FROM
+}
+
+export function slotsForDate(isoDate: string): BookableSlot[] {
+  const morning = { id: 'morning' as const, label: '9:30 AM – 1:00 PM' }
+  const evening = { id: 'evening' as const, label: '6:30 PM – 9:00 PM' }
+
+  if (!usesNovemberSchedule(isoDate)) {
+    return [
+      { ...morning, capacity: 4 },
+      { id: 'afternoon', label: '2:30 PM – 6:30 PM', capacity: 4 },
+      { ...evening, capacity: 2 },
+    ]
+  }
+
+  const afternoon = { id: 'afternoon' as const, label: '3:15 PM – 6:30 PM' }
+  const weekday = weekdayInSingapore(isoDate)
+
+  if (weekday === 0) {
+    return [
+      { ...morning, capacity: 1 },
+      { ...afternoon, capacity: 1 },
+    ]
+  }
+
+  if (weekday === 6) {
+    return [
+      { ...morning, capacity: 3 },
+      { ...afternoon, capacity: 3 },
+      { ...evening, capacity: 2 },
+    ]
+  }
+
+  return [
+    { ...morning, capacity: 4 },
+    { ...afternoon, capacity: 4 },
+    { ...evening, capacity: 2 },
+  ]
+}
+
+export function getSlotForDate(isoDate: string, id: SlotId) {
+  const offered = slotsForDate(isoDate).find((slot) => slot.id === id)
+  if (offered) return offered
+  return getSlot(id)
+}
+
+export function isBookableOnDate(isoDate: string, value: string): value is BookableSlotId {
+  return slotsForDate(isoDate).some((slot) => slot.id === value)
+}
+
+export function slotLabelForDate(isoDate: string, id: string) {
+  return slotsForDate(isoDate).find((slot) => slot.id === id)?.label ?? slotLabel(id)
 }
 
 export function addCalendarDays(isoDate: string, days: number) {
@@ -153,8 +216,8 @@ export function holidayName(isoDate: string) {
 export function dateClosedReason(isoDate: string): 'past' | 'sunday' | 'holiday' | null {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(isoDate)) return 'past'
   if (isoDate < earliestBookableDate()) return 'past'
-  if (isSunday(isoDate)) return 'sunday'
   if (holidayName(isoDate)) return 'holiday'
+  if (isSunday(isoDate) && !usesNovemberSchedule(isoDate)) return 'sunday'
   return null
 }
 

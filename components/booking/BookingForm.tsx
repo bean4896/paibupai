@@ -6,8 +6,8 @@ import {
   earliestBookableDate,
   formatCustomerCode,
   formatLongDate,
+  dateClosedReason,
   holidayName,
-  isSunday,
   parseSingaporeDate,
   type CustomerPrefix,
   type CustomerType,
@@ -394,10 +394,8 @@ export default function BookingForm() {
           <div className="mt-1 grid grid-cols-7 gap-1">
             {days.map((cell, index) => {
               if (!cell) return <div key={`empty-${index}`} />
-              const closedSunday = isSunday(cell.iso)
               const holiday = holidayName(cell.iso)
-              const past = cell.iso < firstOpen
-              const disabled = closedSunday || Boolean(holiday) || past
+              const disabled = Boolean(dateClosedReason(cell.iso))
               const selected = date === cell.iso
               return (
                 <button
@@ -421,7 +419,7 @@ export default function BookingForm() {
           </div>
         </div>
         <p className="mt-2 text-[11px] leading-relaxed text-muted">
-          Monday–Saturday only, from 1 October 2026. Sundays and public holidays are closed. If you need those dates, please call us.
+          From 1 November 2026: Mon–Fri 4 / 4 / 2, Saturday 3 / 3 / 2, Sunday morning and afternoon 1 each. Public holidays stay closed.
         </p>
       </div>
 

@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer'
-import { BOOKING_EMAIL, formatLongDate, getSlot, type SlotId } from './config'
+import { BOOKING_EMAIL, formatLongDate, getSlotForDate, type SlotId } from './config'
 import type { SlotAvailability } from './store'
 
 type BookingMail = {
@@ -32,7 +32,7 @@ function remainingLines(availability: SlotAvailability[]) {
 }
 
 function buildMessage(input: BookingMail) {
-  const slot = getSlot(input.slotId)
+  const slot = getSlotForDate(input.date, input.slotId)
   const taken = input.availability.find((item) => item.id === input.slotId)
   const takenLine = taken ? `${taken.remaining}/${taken.capacity} left after this booking` : ''
 
@@ -55,7 +55,7 @@ function buildMessage(input: BookingMail) {
 }
 
 function buildHtml(input: BookingMail) {
-  const slot = getSlot(input.slotId)
+  const slot = getSlotForDate(input.date, input.slotId)
   const taken = input.availability.find((item) => item.id === input.slotId)
   const rows = [
     ['Name', input.name],
@@ -141,7 +141,7 @@ async function sendViaResend(subject: string, text: string, html: string) {
 }
 
 export async function sendBookingEmail(input: BookingMail) {
-  const slot = getSlot(input.slotId)
+  const slot = getSlotForDate(input.date, input.slotId)
   const text = buildMessage(input)
   const html = buildHtml(input)
   const subject = `Paibupai booking — ${input.date} ${slot.label}`

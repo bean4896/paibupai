@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { dateClosedReason, isBookableSlotId, isCustomerType, parseCustomerCode } from '@/lib/booking/config'
+import { dateClosedReason, isBookableOnDate, isCustomerType, parseCustomerCode } from '@/lib/booking/config'
 import { sendBookingEmail } from '@/lib/booking/email'
 import { addBooking, BookingStorageError } from '@/lib/booking/store'
 
@@ -32,7 +32,7 @@ export async function POST(request: Request) {
     !businessType ||
     !serviceInterest ||
     !date ||
-    !isBookableSlotId(slotId)
+    !isBookableOnDate(date, slotId)
   ) {
     return NextResponse.json({ error: 'Please fill in all required fields.' }, { status: 400 })
   }
@@ -51,7 +51,7 @@ export async function POST(request: Request) {
   const closed = dateClosedReason(date)
   if (closed) {
     return NextResponse.json(
-      { error: 'That date is closed. Please pick a Monday–Saturday working day.' },
+      { error: 'That date is closed. Please pick another working day.' },
       { status: 400 },
     )
   }

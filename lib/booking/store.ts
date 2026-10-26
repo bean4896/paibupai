@@ -1,7 +1,7 @@
 import { promises as fs } from 'fs'
 import path from 'path'
 import { get, put } from '@vercel/blob'
-import { getSlot, isSlotId, TIME_SLOTS, type SlotId } from './config'
+import { getSlotForDate, isBookableOnDate, isSlotId, slotsForDate, type SlotId } from './config'
 
 export type BookingRecord = {
   id: string
@@ -172,7 +172,7 @@ export type SlotAvailability = {
 }
 
 function countsFromBookings(bookings: BookingRecord[], date: string): SlotAvailability[] {
-  return TIME_SLOTS.map((slot) => {
+  return slotsForDate(date).map((slot) => {
     const booked = bookings.filter((item) => item.date === date && item.slotId === slot.id).length
     return {
       id: slot.id,
@@ -185,9 +185,10 @@ function countsFromBookings(bookings: BookingRecord[], date: string): SlotAvaila
 }
 
 export async function getSlotAvailability(date: string): Promise<SlotAvailability[]> {
+  const offered = slotsForDate(date)
   if (bookingStorageKind() === 'redis') {
-    const results = await redisPipeline(TIME_SLOTS.map((slot) => ['GET', `${REDIS_PREFIX}${date}:${slot.id}`]))
-    return TIME_SLOTS.map((slot, index) => {
+    const results = await redisPipeline(offered.map((slot) => ['GET', `${REDIS_PREFIX}${date}:${slot.id}`]))
+    return offered.map((slot, index) => {
       const booked = Number(results[index]?.result ?? 0) || 0
       return {
         id: slot.id,
@@ -306,7 +307,10 @@ export async function deleteBookings(ids: string[]) {
 
 export async function addBooking(input: Omit<BookingRecord, 'id' | 'createdAt'>) {
   return withLock(async () => {
-    const slot = getSlot(input.slotId)
+    if (!isBookableOnDate(input.date, input.slotId)) {
+      return { ok: false as const, availability: await getSlotAvailability(input.date) }
+    }
+    const slot = getSlotForDate(input.date, input.slotId)
 
     if (bookingStorageKind() === 'redis') {
       const key = `${REDIS_PREFIX}${input.date}:${input.slotId}`
