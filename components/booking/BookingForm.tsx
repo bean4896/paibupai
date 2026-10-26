@@ -419,7 +419,7 @@ export default function BookingForm() {
           </div>
         </div>
         <p className="mt-2 text-[11px] leading-relaxed text-muted">
-          From 1 November 2026: Mon–Fri 4 / 4 / 2, Saturday 3 / 3 / 2, Sunday morning and afternoon 1 each. Public holidays stay closed.
+          Public holidays stay closed.
         </p>
       </div>
 
