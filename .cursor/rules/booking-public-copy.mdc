@@ -7,6 +7,6 @@ alwaysApply: true
 
 Do not show how many seats a slot has, or how many are left, on any public page.
 
-- Booking form: show date and time labels only. Hide capacity, remaining, and weekday quota lines such as `4 / 4 / 2`.
+- Booking form: show date and time labels only. Hide capacity, remaining, weekday quota lines, and helper copy such as `Public holidays stay closed.`
 - Full slots can be disabled or greyed out without saying how many are left.
 - Internal dashboard and booking emails may still show booked / capacity.

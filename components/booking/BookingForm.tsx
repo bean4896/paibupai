@@ -418,9 +418,6 @@ export default function BookingForm() {
             })}
           </div>
         </div>
-        <p className="mt-2 text-[11px] leading-relaxed text-muted">
-          Public holidays stay closed.
-        </p>
       </div>
 
       <div>
